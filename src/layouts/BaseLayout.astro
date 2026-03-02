@@ -28,7 +28,10 @@ const currentPath = Astro.url.pathname;
 
   <nav>
     <div class="nav-inner">
-      <a href="/" class="nav-logo">若甫记</a>
+      <a href="/" class="nav-logo">
+        <img src="/favicon.svg" alt="" width="20" height="20" />
+        若甫记
+      </a>
       <div class="nav-links">
         <a href="/" class:list={['nav-link', { active: currentPath === '/' }]}>首页</a>
         <a href="/posts" class:list={['nav-link', { active: currentPath.startsWith('/posts') }]}>文章</a>
