@@ -1,0 +1,39 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: posts
+    label: 文章
+    folder: src/content/posts
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    fields:
+      - label: 标题
+        name: title
+        widget: string
+      - label: 发布日期
+        name: date
+        widget: datetime
+        format: "YYYY-MM-DD"
+        date_format: "YYYY-MM-DD"
+        time_format: false
+      - label: 分类
+        name: category
+        widget: select
+        options: ["教程", "洞察", "随笔"]
+      - label: 摘要
+        name: excerpt
+        widget: string
+        hint: "一两句话，显示在文章列表页"
+      - label: 标签
+        name: tags
+        widget: list
+        required: false
+      - label: 正文
+        name: body
+        widget: markdown

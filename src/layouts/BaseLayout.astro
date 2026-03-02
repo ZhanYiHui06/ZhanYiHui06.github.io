@@ -1,0 +1,61 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = '若甫记',
+  description = '小小产品人的学习日志',
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title === '若甫记' ? title : `${title} · 若甫记`}</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">若甫记</a>
+      <div class="nav-links">
+        <a href="/" class:list={['nav-link', { active: currentPath === '/' }]}>首页</a>
+        <a href="/posts" class:list={['nav-link', { active: currentPath.startsWith('/posts') }]}>文章</a>
+        <a href="/about" class:list={['nav-link', { active: currentPath === '/about' }]}>关于</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <slot />
+  </main>
+
+  <footer>
+    © {new Date().getFullYear()} 若甫记 · 用文字记录思考
+  </footer>
+
+  <script>
+    // Netlify Identity 登录后自动跳转到 /admin
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
