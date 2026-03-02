@@ -1,0 +1,294 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  }).format(new Date(date));
+}
+
+function readTime(body: string) {
+  return Math.max(1, Math.ceil(body.length / 300));
+}
+---
+
+<BaseLayout title={post.data.title} description={post.data.excerpt}>
+  <div class="back-wrap">
+    <a href="/posts" class="back">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M13 7H1M6 2L1 7l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      所有文章
+    </a>
+  </div>
+
+  <header class="article-header">
+    <div class="cat">{post.data.category}</div>
+    <h1>{post.data.title}</h1>
+    <div class="meta">
+      <div class="avatar">E</div>
+      <div class="meta-text">
+        <div class="meta-name">Eric</div>
+        <div class="meta-info">{formatDate(post.data.date)}</div>
+      </div>
+      <div class="read-badge">{readTime(post.body)} 分钟阅读</div>
+    </div>
+  </header>
+
+  <article class="body">
+    <Content />
+  </article>
+
+  <footer class="article-footer">
+    <div class="tags">
+      {post.data.tags?.map((tag: string) => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+    <a href="/posts" class="back-cta">← 返回文章列表</a>
+  </footer>
+</BaseLayout>
+
+<style>
+  .back-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 32px 0;
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .back:hover { color: var(--accent); }
+
+  /* Header */
+  .article-header {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 36px 32px 40px;
+  }
+
+  .cat {
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    color: var(--ink);
+    line-height: 1.2;
+    margin-bottom: 24px;
+    letter-spacing: -0.01em;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-family: var(--serif);
+    font-style: italic;
+    flex-shrink: 0;
+  }
+
+  .meta-text { flex: 1; }
+
+  .meta-name {
+    font-size: 0.8rem;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .meta-info {
+    font-size: 0.7rem;
+    color: var(--ink-3);
+    font-weight: 300;
+  }
+
+  .read-badge {
+    font-size: 0.7rem;
+    color: var(--ink-4);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 12px;
+  }
+
+  /* Article body */
+  .body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 8px 32px 60px;
+    font-size: 0.975rem;
+    line-height: 2;
+    color: var(--ink-2);
+    font-weight: 300;
+  }
+
+  .body :global(p) { margin-bottom: 1.6em; }
+
+  .body :global(h2) {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    color: var(--ink);
+    margin: 2.5em 0 0.8em;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .body :global(h3) {
+    font-size: 0.9rem;
+    color: var(--ink);
+    font-weight: 500;
+    margin: 2em 0 0.6em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .body :global(blockquote) {
+    border-left: 2px solid var(--accent);
+    padding: 12px 0 12px 20px;
+    margin: 2em 0;
+    color: var(--ink-2);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+
+  .body :global(code) {
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.85em;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent-dark);
+  }
+
+  .body :global(pre) {
+    background: #f4f4f2;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 1.5em 0;
+  }
+
+  .body :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--ink);
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
+  .body :global(ul), .body :global(ol) {
+    padding-left: 1.4em;
+    margin-bottom: 1.6em;
+  }
+
+  .body :global(li) { margin-bottom: 0.5em; }
+
+  .body :global(hr) {
+    border: none;
+    text-align: center;
+    color: var(--ink-4);
+    letter-spacing: 0.5em;
+    font-size: 0.7rem;
+    margin: 2.5em 0;
+  }
+
+  .body :global(hr::after) { content: '· · ·'; }
+
+  .body :global(a) {
+    color: var(--accent);
+    border-bottom: 1px solid var(--accent-light);
+    transition: border-color 0.2s;
+  }
+
+  .body :global(a:hover) { border-color: var(--accent); }
+
+  .body :global(img) {
+    width: 100%;
+    border-radius: 4px;
+    margin: 1.5em 0;
+  }
+
+  /* Footer */
+  .article-footer {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 28px 32px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .tag {
+    font-size: 0.68rem;
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 12px;
+    color: var(--ink-3);
+  }
+
+  .back-cta {
+    font-size: 0.75rem;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    transition: color 0.2s;
+  }
+
+  .back-cta:hover { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .back-wrap, .article-header, .body, .article-footer {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+</style>

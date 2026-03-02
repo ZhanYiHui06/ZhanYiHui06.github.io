@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="关于">
+  <div class="about">
+    <div class="avatar">E</div>
+    <h1>Eric</h1>
+    <div class="role">产品人 in Training · 写作者</div>
+
+    <p class="bio">
+      <!-- TODO: 在这里写你的个人简介 -->
+      目前正在学习产品相关的知识和技能，对用户行为和商业逻辑有浓厚兴趣。<br /><br />
+      这个博客是我<em>思考的外置硬盘</em>——把那些值得被记录的想法放在这里，它们可能是一个方法论，一次反思，或者某个下午突然想到的事情。<br /><br />
+      我相信好的产品思维来自广泛的观察和持续的输出。写作对我来说不是展示，而是思考本身。
+    </p>
+
+    <hr />
+
+    <div class="section-title">感兴趣的领域</div>
+    <div class="interests">
+      <!-- TODO: 修改为你真正感兴趣的领域 -->
+      <span>用户体验</span>
+      <span>增长策略</span>
+      <span>行为经济学</span>
+      <span>信息架构</span>
+      <span>商业模式</span>
+      <span>认知心理学</span>
+    </div>
+
+    <hr />
+
+    <div class="section-title">联系方式</div>
+    <div class="contacts">
+      <div class="contact-item">
+        <span class="label">邮件</span>
+        <!-- TODO: 替换为你的邮件地址 -->
+        <a href="mailto:your@email.com" class="val">your@email.com</a>
+      </div>
+      <div class="contact-item">
+        <span class="label">GitHub</span>
+        <a href="https://github.com/ZhanYiHui06" target="_blank" class="val">ZhanYiHui06</a>
+      </div>
+      <div class="contact-item">
+        <span class="label">小红书</span>
+        <!-- TODO: 替换为你的小红书主页链接或ID -->
+        <a href="#" class="val">@你的小红书ID</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .about {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 64px 32px 80px;
+  }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-size: 2rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .role {
+    font-size: 0.78rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  .bio {
+    font-size: 0.975rem;
+    color: var(--ink-2);
+    line-height: 2;
+    font-weight: 300;
+    margin-bottom: 0;
+  }
+
+  .bio em {
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+
+  .section-title {
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    margin-bottom: 18px;
+  }
+
+  .interests {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .interests span {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    color: var(--ink-2);
+  }
+
+  .contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.85rem;
+  }
+
+  .label {
+    width: 72px;
+    font-size: 0.7rem;
+    color: var(--ink-4);
+    letter-spacing: 0.06em;
+    flex-shrink: 0;
+  }
+
+  .val {
+    color: var(--accent);
+    transition: color 0.2s;
+    border-bottom: 1px solid var(--accent-light);
+  }
+
+  .val:hover {
+    color: var(--accent-dark);
+    border-color: var(--accent);
+  }
+
+  @media (max-width: 600px) {
+    .about { padding: 48px 20px 60px; }
+  }
+</style>

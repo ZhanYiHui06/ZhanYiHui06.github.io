@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+const posts = allPosts.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+
+function formatDate(date: Date) {
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  }).format(new Date(date));
+}
+
+function readTime(body: string) {
+  const words = body.length;
+  const mins = Math.max(1, Math.ceil(words / 300));
+  return `${mins} 分钟`;
+}
+---
+
+<BaseLayout title="所有文章">
+  <div class="header">
+    <div class="header-inner">
+      <h1>所有文章</h1>
+      <p>共 {posts.length} 篇 · 持续更新中</p>
+    </div>
+  </div>
+
+  <!-- Filter bar (client-side) -->
+  <div class="filter-bar">
+    <button class="chip active" data-cat="all">全部</button>
+    <button class="chip" data-cat="教程">教程</button>
+    <button class="chip" data-cat="洞察">洞察</button>
+    <button class="chip" data-cat="随笔">随笔</button>
+  </div>
+
+  <div class="posts-list">
+    {posts.map((post) => (
+      <a href={`/posts/${post.slug}`} class="card" data-cat={post.data.category}>
+        <div class="card-meta">
+          <span class="cat">{post.data.category}</span>
+          <span class="dot"></span>
+          <span class="date">{formatDate(post.data.date)}</span>
+          <span class="read">{readTime(post.body)} 阅读</span>
+        </div>
+        <h2>{post.data.title}</h2>
+        <p>{post.data.excerpt}</p>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
+  const cards = document.querySelectorAll<HTMLElement>('.card');
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const cat = chip.dataset.cat!;
+      cards.forEach(card => {
+        card.style.display =
+          cat === 'all' || card.dataset.cat === cat ? '' : 'none';
+      });
+    });
+  });
+</script>
+
+<style>
+  .header {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 52px 32px 36px;
+  }
+
+  .header-inner h1 {
+    font-family: var(--serif);
+    font-size: 2rem;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .header-inner p {
+    font-size: 0.85rem;
+    color: var(--ink-3);
+    font-weight: 300;
+  }
+
+  .filter-bar {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 20px 32px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 5px 16px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--ink-3);
+    transition: all 0.2s;
+    font-family: var(--sans);
+    letter-spacing: 0.04em;
+  }
+
+  .chip.active, .chip:hover {
+    background: var(--accent);
+    color: var(--white);
+    border-color: var(--accent);
+  }
+
+  .posts-list {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  .card {
+    display: block;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    transition: opacity 0.15s;
+  }
+
+  .card:first-child { border-top: 1px solid var(--border); }
+  .card:hover { opacity: 0.7; }
+  .card:hover h2 { color: var(--accent); }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .cat {
+    font-size: 0.62rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .dot {
+    width: 3px;
+    height: 3px;
+    background: var(--ink-4);
+    border-radius: 50%;
+  }
+
+  .date {
+    font-size: 0.68rem;
+    color: var(--ink-4);
+    font-weight: 300;
+  }
+
+  .read {
+    font-size: 0.68rem;
+    color: var(--ink-4);
+    font-weight: 300;
+    margin-left: auto;
+  }
+
+  .card h2 {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    color: var(--ink);
+    line-height: 1.35;
+    margin-bottom: 8px;
+    transition: color 0.2s;
+  }
+
+  .card p {
+    font-size: 0.82rem;
+    color: var(--ink-3);
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  @media (max-width: 600px) {
+    .header-inner, .filter-bar, .posts-list {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+</style>
