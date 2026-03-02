@@ -22,7 +22,7 @@ const currentPath = Astro.url.pathname;
   <meta name="description" content={description} />
   <title>{title === '若甫记' ? title : `${title} · 若甫记`}</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
 
@@ -45,13 +45,13 @@ const currentPath = Astro.url.pathname;
     © {new Date().getFullYear()} 若甫记 · 用文字记录思考
   </footer>
 
-  <script>
-    window.addEventListener('load', () => {
+  <script is:inline>
+    window.addEventListener('load', function() {
       if (!window.netlifyIdentity) return;
 
-      window.netlifyIdentity.on('init', user => {
+      window.netlifyIdentity.on('init', function(user) {
         // 处理邀请 / 确认 / 找回密码链接
-        const hash = window.location.hash;
+        var hash = window.location.hash;
         if (!user && hash && (
           hash.includes('invite_token') ||
           hash.includes('confirmation_token') ||
@@ -62,7 +62,7 @@ const currentPath = Astro.url.pathname;
 
         // 登录后跳转到后台
         if (!user) {
-          window.netlifyIdentity.on('login', () => {
+          window.netlifyIdentity.on('login', function() {
             document.location.href = '/admin/';
           });
         }
