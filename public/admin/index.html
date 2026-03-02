@@ -1,129 +1,662 @@
 <!doctype html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>若甫记 · 后台管理</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
-    /* ── 全局字体 & 基础 ── */
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400&display=swap');
+    /* ═══════════════════════════════════════════
+       若甫记 CMS 后台 — 莫兰迪墨绿主题
+       与主站 global.css 设计语言完全统一
+       ═══════════════════════════════════════════ */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Noto+Serif+SC:wght@400;600&family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400&display=swap');
 
+    /* ── 基础 ── */
+    * { box-sizing: border-box; }
     body {
       font-family: 'Lato', 'Noto Sans SC', sans-serif !important;
       background: #f9f9f7 !important;
+      color: #1a1a1a !important;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── 顶部导航栏 ── */
-    header[class*="AppHeader"],
+    /* ══ 顶栏 ══ */
     [class*="AppHeader"],
-    nav[class*="Navbar"] {
-      background: #f9f9f7 !important;
+    header[class*="Header"] {
+      background: rgba(249,249,247,0.95) !important;
+      backdrop-filter: blur(12px) !important;
       border-bottom: 1px solid #e8e8e8 !important;
+      box-shadow: none !important;
+      padding: 0 24px !important;
     }
 
-    /* ── 主色调覆盖：蓝 → 莫兰迪墨绿 ── */
-    a { color: #5C7A6B; }
-    a:hover { color: #445C50; }
-
-    /* 所有蓝色按钮 → 墨绿 */
-    button[class*="ToolbarButton"],
-    [class*="PublishButton"] button,
-    [class*="DropdownButton"] button,
-    button[class*="Button-green"],
-    [data-testid="toolbar-button"] {
-      background-color: #5C7A6B !important;
-      border-color: #5C7A6B !important;
-      color: #fff !important;
-    }
-    button[class*="ToolbarButton"]:hover,
-    [class*="PublishButton"] button:hover,
-    [class*="DropdownButton"] button:hover,
-    button[class*="Button-green"]:hover,
-    [data-testid="toolbar-button"]:hover {
-      background-color: #445C50 !important;
-      border-color: #445C50 !important;
+    /* 站点名 → 若甫记斜体 */
+    [class*="AppHeaderSiteLink"],
+    [class*="AppHeader"] a:first-of-type,
+    header a[href="/"] {
+      font-family: 'DM Serif Display', 'Noto Serif SC', serif !important;
+      font-style: italic !important;
+      font-size: 1.15rem !important;
+      color: #1a1a1a !important;
+      letter-spacing: 0.01em !important;
+      text-decoration: none !important;
     }
 
-    /* 侧栏选中高亮 */
-    [class*="SidebarNavLink"][class*="active"],
-    [class*="SidebarNavLink"]:hover,
-    a[href="#/collections/posts"].css-ixishe,
-    li[class*="active"] a {
+    /* 顶栏链接 */
+    [class*="AppHeaderNavLink"],
+    [class*="AppHeader"] nav a {
+      font-size: 0.78rem !important;
+      letter-spacing: 0.06em !important;
+      color: #888 !important;
+      transition: color 0.2s !important;
+      text-decoration: none !important;
+    }
+    [class*="AppHeaderNavLink"]:hover,
+    [class*="AppHeader"] nav a:hover {
+      color: #1a1a1a !important;
+    }
+
+    /* ══ 隐藏 Quick Add ══ */
+    [class*="QuickAdd"],
+    [class*="quickAdd"],
+    button[class*="AppHeaderQuickNewButton"],
+    [class*="AppHeader"] [class*="Dropdown"]:not([class*="SettingsDropdown"]),
+    [class*="AppHeader"] > div > div:nth-child(2) button:not([class*="Avatar"]):not([class*="Settings"]) {
+      display: none !important;
+    }
+
+    /* ══ 链接全局色 ══ */
+    a { color: #5C7A6B !important; text-decoration: none; }
+    a:hover { color: #445C50 !important; }
+
+    /* ══ 侧栏 ══ */
+    [class*="Sidebar"], aside {
+      background: #fff !important;
+      border-right: 1px solid #e8e8e8 !important;
+    }
+    [class*="SidebarHeading"], [class*="Sidebar"] h2 {
+      font-family: 'DM Serif Display', serif !important;
+      font-size: 1.1rem !important;
+      color: #1a1a1a !important;
+    }
+    [class*="SidebarNavLink"] a, [class*="Sidebar"] li a {
+      font-size: 0.82rem !important;
+      color: #888 !important;
+      transition: all 0.2s !important;
+      border-left: 2px solid transparent !important;
+      padding: 8px 16px !important;
+    }
+    [class*="SidebarNavLink"][class*="active"] a,
+    [class*="Sidebar"] li.active a,
+    [class*="Sidebar"] li a:hover {
       color: #5C7A6B !important;
       border-left-color: #5C7A6B !important;
       background: #EEF2F0 !important;
     }
 
-    /* 顶栏链接 */
-    [class*="AppHeaderNavLink"],
-    header a {
-      color: #5C7A6B !important;
+    /* 搜索框 */
+    [class*="Sidebar"] input, [class*="SearchInput"] {
+      border: 1px solid #e8e8e8 !important;
+      border-radius: 6px !important;
+      font-size: 0.82rem !important;
+      padding: 8px 12px !important;
+      background: #f9f9f7 !important;
     }
-    [class*="AppHeaderNavLink"]:hover,
-    header a:hover {
-      color: #445C50 !important;
-    }
-
-    /* 搜索 / 输入框聚焦边框 */
-    input:focus, textarea:focus, [class*="ControlPane"] input:focus {
+    [class*="Sidebar"] input:focus, [class*="SearchInput"]:focus {
       border-color: #5C7A6B !important;
-      box-shadow: 0 0 0 3px rgba(92,122,107,0.12) !important;
+      box-shadow: 0 0 0 3px rgba(92,122,107,0.1) !important;
       outline: none !important;
     }
 
-    /* 卡片列表 hover */
-    [class*="ListCard"]:hover,
-    [class*="EntryCard"]:hover {
-      border-color: #5C7A6B !important;
+    /* ══ 内容区 ══ */
+    [class*="CollectionTop"], [class*="ViewControls"] {
+      border-bottom: 1px solid #e8e8e8 !important;
+    }
+    [class*="CollectionLabel"], main h1, main h2 {
+      font-family: 'DM Serif Display', 'Noto Serif SC', serif !important;
+      color: #1a1a1a !important;
+    }
+    [class*="SortControl"], [class*="ViewStyle"] {
+      font-size: 0.72rem !important;
+      color: #bbb !important;
     }
 
-    /* 顶栏站点名 */
-    [class*="AppHeaderSiteLink"],
-    header [class*="Logo"],
-    header span:first-child {
-      font-family: 'DM Serif Display', serif !important;
-      font-style: italic;
-      font-size: 1.15rem !important;
+    /* ══ 文章列表卡片 ══ */
+    [class*="ListCard"], [class*="ListCardLink"] {
+      border: 1px solid #e8e8e8 !important;
+      border-radius: 0 !important;
+      background: #fff !important;
+      transition: all 0.15s !important;
+      padding: 16px 20px !important;
+    }
+    [class*="ListCard"]:hover, [class*="ListCardLink"]:hover {
+      border-color: #5C7A6B !important;
+      background: #EEF2F0 !important;
+    }
+    [class*="ListCardTitle"], [class*="ListCard"] h2 {
+      font-family: 'DM Serif Display', 'Noto Serif SC', serif !important;
+      font-size: 1rem !important;
       color: #1a1a1a !important;
     }
 
-    /* 编辑器工具栏图标颜色 */
-    [class*="Toolbar"] svg,
-    [class*="toolbar"] button svg {
-      fill: #5C7A6B !important;
+    /* ══ 按钮系统 ══ */
+    /* 主按钮 */
+    [class*="ToolbarButton"],
+    button[class*="ButtonGreen"],
+    button[class*="Button-green"],
+    [class*="PublishButton"] button,
+    a[href*="/new"],
+    [class*="CreateNew"] {
+      background: #5C7A6B !important;
+      border: 1px solid #5C7A6B !important;
+      color: #fff !important;
+      border-radius: 0 !important;
+      padding: 8px 18px !important;
+      font-size: 0.78rem !important;
+      font-family: 'Lato', 'Noto Sans SC', sans-serif !important;
+      letter-spacing: 0.04em !important;
+      cursor: pointer !important;
+      transition: background 0.2s !important;
+      box-shadow: none !important;
+    }
+    [class*="ToolbarButton"]:hover,
+    button[class*="ButtonGreen"]:hover,
+    button[class*="Button-green"]:hover,
+    [class*="PublishButton"] button:hover,
+    a[href*="/new"]:hover,
+    [class*="CreateNew"]:hover {
+      background: #445C50 !important;
+      border-color: #445C50 !important;
     }
 
-    /* 分支/工作流选项卡 */
-    [class*="TabButton"][class*="active"],
-    [role="tab"][aria-selected="true"] {
-      border-bottom-color: #5C7A6B !important;
+    /* 次要按钮 */
+    button[class*="Button-gray"],
+    button[class*="DeleteButton"] {
+      background: #fff !important;
+      border: 1px solid #e8e8e8 !important;
+      color: #444 !important;
+      border-radius: 0 !important;
+      padding: 8px 18px !important;
+      font-size: 0.78rem !important;
+      font-family: 'Lato', 'Noto Sans SC', sans-serif !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+      box-shadow: none !important;
+    }
+    button[class*="Button-gray"]:hover, button[class*="DeleteButton"]:hover {
+      border-color: #5C7A6B !important;
       color: #5C7A6B !important;
     }
 
-    /* 标签 / 分类小徽章 */
+    /* 下拉按钮 & 面板 */
+    [class*="DropdownButton"] button {
+      background: #5C7A6B !important;
+      border: 1px solid #5C7A6B !important;
+      color: #fff !important;
+      border-radius: 0 !important;
+      font-size: 0.78rem !important;
+      box-shadow: none !important;
+    }
+    [class*="DropdownButton"] button:hover { background: #445C50 !important; }
+    [class*="DropdownList"], ul[role="listbox"] {
+      border: 1px solid #e8e8e8 !important;
+      border-radius: 4px !important;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+      background: #fff !important;
+    }
+    [class*="DropdownItem"], li[role="option"] {
+      font-size: 0.82rem !important;
+      padding: 8px 16px !important;
+      color: #444 !important;
+    }
+    [class*="DropdownItem"]:hover, li[role="option"]:hover {
+      background: #EEF2F0 !important;
+      color: #5C7A6B !important;
+    }
+
+    /* ══ Markdown 编辑器工具栏 ══ */
+    [class*="ToolbarToggle"],
+    [class*="EditorToolbar"],
+    [class*="editor-toolbar"] {
+      background: #fff !important;
+      border: 1px solid #e8e8e8 !important;
+      border-bottom: none !important;
+      padding: 4px 6px !important;
+    }
+
+    /* 工具栏每个按钮 */
+    [class*="ToolbarToggle"] button,
+    [class*="EditorToolbar"] button,
+    [class*="MarkdownControl"] [class*="Toolbar"] button,
+    [class*="editor-toolbar"] button {
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      color: #888 !important;
+      border-radius: 4px !important;
+      padding: 4px 7px !important;
+      margin: 0 1px !important;
+      min-width: 28px !important;
+      height: 28px !important;
+      cursor: pointer !important;
+      transition: all 0.15s !important;
+      box-shadow: none !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    [class*="ToolbarToggle"] button:hover,
+    [class*="EditorToolbar"] button:hover,
+    [class*="MarkdownControl"] [class*="Toolbar"] button:hover,
+    [class*="editor-toolbar"] button:hover {
+      background: #EEF2F0 !important;
+      border-color: #e8e8e8 !important;
+      color: #5C7A6B !important;
+    }
+    [class*="ToolbarToggle"] button[class*="active"],
+    [class*="EditorToolbar"] button[class*="active"] {
+      background: #EEF2F0 !important;
+      color: #5C7A6B !important;
+      border-color: #5C7A6B !important;
+    }
+
+    /* 工具栏图标 */
+    [class*="ToolbarToggle"] svg,
+    [class*="EditorToolbar"] svg,
+    [class*="MarkdownControl"] [class*="Toolbar"] svg {
+      width: 15px !important;
+      height: 15px !important;
+      fill: currentColor !important;
+    }
+
+    /* 富文本 / Markdown 模式切换 */
+    [class*="FormatTab"],
+    [class*="ModeToggle"] button,
+    [class*="EditorToggle"] button {
+      font-size: 0.72rem !important;
+      letter-spacing: 0.06em !important;
+      color: #bbb !important;
+      border: none !important;
+      background: none !important;
+      cursor: pointer !important;
+      padding: 6px 12px !important;
+    }
+    [class*="FormatTab"][class*="active"],
+    [class*="ModeToggle"] button[class*="active"],
+    [class*="EditorToggle"] button[class*="active"] {
+      color: #5C7A6B !important;
+      border-bottom: 2px solid #5C7A6B !important;
+    }
+
+    /* 编辑器文本区 */
+    [class*="RawEditor"],
+    [class*="VisualEditor"],
+    [data-slate-editor],
+    [class*="ControlPaneContainer"] textarea {
+      font-family: 'Lato', 'Noto Sans SC', sans-serif !important;
+      font-size: 0.95rem !important;
+      line-height: 1.85 !important;
+      color: #1a1a1a !important;
+      border: 1px solid #e8e8e8 !important;
+      padding: 20px !important;
+      background: #fff !important;
+    }
+
+    /* ══ 表单 ══ */
+    [class*="ControlPaneContainer"] input,
+    [class*="ControlPaneContainer"] select,
+    [class*="ControlPaneContainer"] textarea,
+    [class*="Widget"] input,
+    [class*="Widget"] select {
+      border: 1px solid #e8e8e8 !important;
+      border-radius: 4px !important;
+      padding: 10px 14px !important;
+      font-size: 0.88rem !important;
+      font-family: 'Lato', 'Noto Sans SC', sans-serif !important;
+      color: #1a1a1a !important;
+      background: #fff !important;
+      transition: border-color 0.2s !important;
+      box-shadow: none !important;
+    }
+    [class*="ControlPaneContainer"] input:focus,
+    [class*="ControlPaneContainer"] select:focus,
+    [class*="ControlPaneContainer"] textarea:focus,
+    [class*="Widget"] input:focus,
+    [class*="Widget"] select:focus {
+      border-color: #5C7A6B !important;
+      box-shadow: 0 0 0 3px rgba(92,122,107,0.1) !important;
+      outline: none !important;
+    }
+
+    /* 字段标签 */
+    [class*="ControlLabel"], [class*="FieldLabel"], label[class*="Label"] {
+      font-size: 0.72rem !important;
+      letter-spacing: 0.1em !important;
+      text-transform: uppercase !important;
+      color: #888 !important;
+      font-weight: 400 !important;
+      margin-bottom: 6px !important;
+    }
+
+    /* 提示 */
+    [class*="ControlHint"] {
+      font-size: 0.72rem !important;
+      color: #bbb !important;
+      font-weight: 300 !important;
+    }
+
+    /* ══ 标签徽章 ══ */
     [class*="Tag"], [class*="Badge"] {
       background: #EEF2F0 !important;
       color: #5C7A6B !important;
-      border: 1px solid #5C7A6B !important;
+      border: 1px solid rgba(92,122,107,0.3) !important;
+      border-radius: 20px !important;
+      padding: 3px 12px !important;
+      font-size: 0.68rem !important;
     }
 
-    /* 新建按钮 */
-    [class*="CreateNew"],
-    a[href="#/collections/posts/new"] {
+    /* ══ Tab ══ */
+    [role="tab"] { font-size: 0.78rem !important; color: #888 !important; }
+    [role="tab"][aria-selected="true"] {
+      color: #5C7A6B !important;
+      border-bottom-color: #5C7A6B !important;
+    }
+
+    /* ══ 通知 ══ */
+    [class*="Notification"], [class*="Toast"] {
+      border-radius: 4px !important;
+      font-size: 0.82rem !important;
+      font-family: 'Lato', 'Noto Sans SC', sans-serif !important;
+    }
+    [class*="NotificationSuccess"], [class*="Toast"][class*="success"] {
       background: #5C7A6B !important;
       color: #fff !important;
     }
-    [class*="CreateNew"]:hover,
-    a[href="#/collections/posts/new"]:hover {
-      background: #445C50 !important;
+
+    /* ══ 对话框 ══ */
+    [class*="Dialog"], [class*="Modal"] {
+      border-radius: 6px !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1) !important;
+      border: 1px solid #e8e8e8 !important;
+    }
+
+    /* ══ 加载 ══ */
+    [class*="Loader"], [class*="Spinner"] {
+      border-color: #EEF2F0 !important;
+      border-top-color: #5C7A6B !important;
     }
   </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    // 注册预览样式，让编辑器预览也使用主站字体
+    /* ══ 注册完整中文翻译 ══ */
+    CMS.registerLocale('zh_Hans', {
+      app: {
+        header: {
+          content: '内容',
+          media: '媒体',
+          quickAdd: '快速新建',
+        },
+        app: {
+          loading: '加载中...',
+          errorHeader: '加载 CMS 配置时出错',
+          configErrors: '配置错误',
+          checkConfigYml: '请检查 config.yml 文件',
+          loadingConfig: '正在加载配置...',
+          waitingBackend: '等待后端服务...',
+        },
+        notFoundPage: {
+          header: '404 — 未找到',
+        },
+      },
+      collection: {
+        sidebar: {
+          collections: '集合',
+          allCollections: '所有集合',
+          searchAll: '搜索全部',
+          searchIn: '搜索',
+        },
+        collectionTop: {
+          sortBy: '排序方式',
+          viewAs: '查看方式',
+          newButton: '新建%{collectionLabel}',
+          ascending: '升序',
+          descending: '降序',
+          searchResults: '「%{searchTerm}」的搜索结果',
+          searchResultsInCollection: '在%{collection}中搜索「%{searchTerm}」的结果',
+          filterBy: '筛选',
+          groupBy: '分组',
+        },
+        entries: {
+          loadingEntries: '正在加载条目...',
+          cachingEntries: '正在缓存条目...',
+          longerLoading: '这可能需要几分钟',
+          noEntries: '暂无条目',
+        },
+        groups: {
+          other: '其他',
+          negateLabel: '非%{label}',
+        },
+        defaultFields: {
+          author: { label: '作者' },
+          updatedOn: { label: '更新于' },
+        },
+      },
+      editor: {
+        editorControl: {
+          field: {
+            optional: '可选',
+          },
+        },
+        editorControlPane: {
+          widget: {
+            required: '%{fieldLabel}为必填项',
+            regexPattern: '%{fieldLabel}不匹配模式：%{pattern}',
+            processing: '%{fieldLabel}正在处理中',
+            range: '%{fieldLabel}必须在%{minValue}和%{maxValue}之间',
+            min: '%{fieldLabel}必须至少为%{minValue}',
+            max: '%{fieldLabel}必须小于或等于%{maxValue}',
+            rangeCount: '%{fieldLabel}必须有%{minCount}到%{maxCount}个项目',
+            rangeCountExact: '%{fieldLabel}必须恰好有%{count}个项目',
+            rangeMin: '%{fieldLabel}必须至少有%{minCount}个项目',
+            rangeMax: '%{fieldLabel}最多有%{maxCount}个项目',
+            invalidPath: '「%{path}」不是有效路径',
+            pathExists: '路径「%{path}」已存在',
+          },
+        },
+        editor: {
+          onLeavePage: '你确定要离开此页面吗？',
+          onUpdatingWithUnsavedChangesBody: '你有未保存的更改，请在更新状态前先保存。',
+          onPublishingNotReadyBody: '请在发布前将状态更新为「就绪」。',
+          onPublishingWithUnsavedChangesBody: '你有未保存的更改，请在发布前先保存。',
+          onPublishingBody: '确定要发布这篇文章吗？',
+          onUnpublishing: '确定要取消发布这篇文章吗？',
+          onDeleteWithUnsavedChangesBody: '确定要删除这篇已发布的文章以及本次未保存的更改吗？',
+          onDeletePublishedEntryBody: '确定要删除这篇已发布的文章吗？',
+          loadingEntry: '正在加载文章...',
+          confirmLoadCmsTranslationBody: '找不到你的语言翻译，是否加载默认翻译？',
+        },
+        editorInterface: {
+          toggleI18n: '切换多语言',
+          togglePreview: '切换预览',
+          toggleScrollSync: '同步滚动',
+        },
+        editorToolbar: {
+          publishing: '正在发布...',
+          publish: '发布',
+          published: '已发布',
+          unpublish: '取消发布',
+          duplicate: '复制',
+          unpublishing: '正在取消发布...',
+          publishAndCreateNew: '发布并新建',
+          publishAndDuplicate: '发布并复制',
+          deleteUnpublishedChanges: '删除未发布的更改',
+          deleteUnpublishedEntry: '删除未发布的文章',
+          deletePublishedEntry: '删除已发布的文章',
+          deleteEntry: '删除文章',
+          saving: '正在保存...',
+          save: '保存',
+          statusInfoTooltipDraft: '草稿状态',
+          statusInfoTooltipInReview: '审核中',
+          deleting: '正在删除...',
+          updating: '正在更新...',
+          status: '状态：',
+          backCollection: '返回%{collectionLabel}集合',
+          unsavedChanges: '有未保存的更改',
+          unsavedChangesDialog: '你有未保存的更改，确定要离开吗？',
+          discardChanges: '放弃更改',
+          discardChangesTitle: '放弃更改',
+          discardChangesBody: '确定要放弃未保存的更改吗？',
+        },
+        editorWidgets: {
+          markdown: {
+            bold: '粗体',
+            italic: '斜体',
+            code: '代码',
+            link: '链接',
+            linkPrompt: '请输入链接 URL',
+            headings: '标题',
+            quote: '引用',
+            bulletedList: '无序列表',
+            numberedList: '有序列表',
+            addComponent: '添加组件',
+            richText: '富文本',
+            markdown: 'Markdown',
+          },
+          image: {
+            choose: '选择图片',
+            chooseUrl: '从 URL 插入',
+            replaceUrl: '用 URL 替换',
+            promptUrl: '输入图片 URL',
+            chooseDifferent: '选择其他图片',
+            remove: '移除图片',
+          },
+          file: {
+            choose: '选择文件',
+            chooseUrl: '从 URL 插入',
+            replaceUrl: '用 URL 替换',
+            promptUrl: '输入文件 URL',
+            chooseDifferent: '选择其他文件',
+          },
+          unknownControl: {
+            noControl: '控件「%{widget}」没有对应的组件',
+          },
+          unknownPreview: {
+            noPreview: '控件「%{widget}」没有对应的预览',
+          },
+          headingOptions: {
+            headingOne: '标题 1',
+            headingTwo: '标题 2',
+            headingThree: '标题 3',
+            headingFour: '标题 4',
+            headingFive: '标题 5',
+            headingSix: '标题 6',
+          },
+          datetime: {
+            now: '现在',
+          },
+          list: {
+            add: '新增%{item}',
+            addType: '新增%{item}项目',
+          },
+        },
+      },
+      mediaLibrary: {
+        mediaLibraryCard: {
+          draft: '草稿',
+          copy: '复制',
+          copyUrl: '复制 URL',
+          copyPath: '复制路径',
+          copyName: '复制名称',
+          copied: '已复制',
+        },
+        mediaLibrary: {
+          onDeleteBody: '确定要删除所选媒体吗？',
+          fileTooLargeBody: '文件过大。\n已配置最大不超过 %{size} KB。',
+        },
+        mediaLibraryModal: {
+          loading: '加载中...',
+          noResults: '没有结果',
+          noAssetsFound: '未找到资源',
+          noImagesFound: '未找到图片',
+          images: '图片',
+          mediaAssets: '媒体资源',
+          search: '搜索...',
+          uploading: '正在上传...',
+          upload: '上传',
+          download: '下载',
+          deleting: '正在删除...',
+          deleteSelected: '删除所选',
+          chooseSelected: '使用所选',
+        },
+      },
+      ui: {
+        default: {
+          goBackToSite: '返回网站',
+        },
+        errorBoundary: {
+          title: '出错了',
+          details: '发生了一个错误 — 请',
+          reportIt: '在 GitHub 上报告此问题',
+          detailsHeading: '详情',
+          privacyWarning: '报告中会预填错误信息和调试数据。\n请核实信息是否正确，并移除敏感数据。',
+          recoveredEntry: {
+            heading: '已恢复的文章',
+            warning: '请在离开此页面前将内容复制到其他地方！',
+            copyButtonLabel: '复制到剪贴板',
+          },
+        },
+        settingsDropdown: {
+          logOut: '退出登录',
+        },
+        toast: {
+          onFailToLoadEntries: '加载条目失败：%{details}',
+          onFailToLoadDeployPreview: '加载预览失败：%{details}',
+          onFailToPersist: '保存条目失败：%{details}',
+          onFailToDelete: '删除条目失败：%{details}',
+          onFailToUpdateStatus: '更新状态失败：%{details}',
+          missingRequiredField: '你遗漏了必填项，请在保存前填写。',
+          entrySaved: '条目已保存',
+          entryPublished: '条目已发布',
+          onFailToPublishEntry: '发布失败：%{details}',
+          entryUpdated: '条目状态已更新',
+          onDeleteUnpublishedChanges: '未发布的更改已删除',
+          onFailToAuth: '%{details}',
+          onLoggedOut: '你已退出登录，请备份数据后重新登录。',
+          onBackendDown: '后端服务异常，详情：%{details}',
+        },
+      },
+      workflow: {
+        workflow: {
+          loading: '正在加载编辑工作流条目',
+          workflowHeading: '编辑工作流',
+          newPost: '新建文章',
+          description: '%{smart_count}篇文章等待审核，%{readyCount}篇已就绪。',
+          dateFormat: 'M月D日',
+        },
+        workflowCard: {
+          lastChange: '%{date}由%{author}更改',
+          lastChangeNoAuthor: '%{date}更改',
+          lastChangeNoDate: '由%{author}更改',
+          deleteChanges: '删除更改',
+          deleteNewEntry: '删除新条目',
+          publishChanges: '发布更改',
+          publishNewEntry: '发布新条目',
+        },
+        workflowList: {
+          onDeleteEntry: '确定要删除此条目吗？',
+          onPublishingNotReadyEntry: '只有「就绪」状态的条目可以发布。请将卡片拖到「就绪」列来更新状态。',
+          onPublishEntry: '确定要发布此条目吗？',
+          draftHeader: '草稿',
+          inReviewHeader: '审核中',
+          readyHeader: '就绪',
+          currentEntries: '%{smart_count}个条目',
+        },
+      },
+    });
+
+    /* ══ 注册预览样式 ══ */
     CMS.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400&display=swap');
     CMS.registerPreviewStyle(`
       body {
@@ -133,9 +666,10 @@
         padding: 32px;
         max-width: 760px;
         margin: 0 auto;
+        background: #f9f9f7;
       }
-      h1, h2, h3, h4 {
-        font-family: 'DM Serif Display', serif;
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'DM Serif Display', 'Noto Serif SC', serif;
         color: #1a1a1a;
         margin: 1.6em 0 0.6em;
         line-height: 1.3;
@@ -143,7 +677,9 @@
       h1 { font-size: 2rem; }
       h2 { font-size: 1.5rem; }
       h3 { font-size: 1.2rem; }
-      a { color: #5C7A6B; }
+      p { margin: 0.8em 0; }
+      a { color: #5C7A6B; text-decoration: none; }
+      a:hover { color: #445C50; }
       code {
         background: #EEF2F0;
         padding: 2px 6px;
@@ -155,7 +691,9 @@
         padding: 16px;
         border-radius: 6px;
         overflow-x: auto;
+        margin: 1.2em 0;
       }
+      pre code { background: none; padding: 0; }
       blockquote {
         border-left: 3px solid #5C7A6B;
         padding-left: 16px;
@@ -164,6 +702,11 @@
       }
       img { max-width: 100%; border-radius: 6px; }
       hr { border: none; border-top: 1px solid #e8e8e8; margin: 2em 0; }
+      ul, ol { padding-left: 1.5em; margin: 0.8em 0; }
+      li { margin: 0.3em 0; }
+      table { border-collapse: collapse; width: 100%; margin: 1.2em 0; }
+      th, td { border: 1px solid #e8e8e8; padding: 8px 12px; text-align: left; }
+      th { background: #EEF2F0; font-weight: 500; }
     `, { raw: true });
   </script>
 </body>
