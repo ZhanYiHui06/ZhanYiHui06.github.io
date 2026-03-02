@@ -7,56 +7,64 @@
   <title>若甫记 · 写作后台</title>
   <link rel="icon" href="/favicon.svg" />
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <link rel="stylesheet" href="/admin/cms-theme.css" />
   <style>
-    #cms-loading {
-      position: fixed; inset: 0; background: #fafaf8;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      z-index: 9999; gap: 16px;
-      font-family: 'Lato', 'Noto Sans SC', sans-serif;
-      transition: opacity 0.4s ease;
+    /* 只改主题色：默认蓝 → 莫兰迪墨绿 */
+    [class*="AppHeader"] { background: #fff !important; }
+    a { color: #5C7A6B; }
+    a:hover { color: #445C50; }
+
+    /* 主按钮 */
+    button[class*="Button"][class*="green"],
+    [class*="ToolbarButton"][class*="active"],
+    a[href*="/new"] {
+      background-color: #5C7A6B !important;
+      border-color: #5C7A6B !important;
     }
-    #cms-loading .logo { font-size: 1.5rem; color: #1a1a1a; letter-spacing: 0.05em; }
-    #cms-loading .logo em { font-style: italic; color: #5C7A6B; }
-    #cms-loading .sub { font-size: 0.7rem; color: #bbb; letter-spacing: 0.18em; text-transform: uppercase; }
-    #cms-loading .spinner {
-      width: 20px; height: 20px;
-      border: 1.5px solid #e8e8e8; border-top-color: #5C7A6B;
-      border-radius: 50%; animation: spin 0.8s linear infinite;
+    button[class*="Button"][class*="green"]:hover,
+    a[href*="/new"]:hover {
+      background-color: #445C50 !important;
+      border-color: #445C50 !important;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* 发布按钮 */
+    [class*="PublishButton"] button,
+    [class*="DropdownButton"] button {
+      background-color: #5C7A6B !important;
+      border-color: #5C7A6B !important;
+    }
+    [class*="PublishButton"] button:hover,
+    [class*="DropdownButton"] button:hover {
+      background-color: #445C50 !important;
+      border-color: #445C50 !important;
+    }
+
+    /* 侧栏选中 */
+    [class*="NavLink"][class*="active"] {
+      color: #5C7A6B !important;
+      border-left-color: #5C7A6B !important;
+    }
+
+    /* 聚焦边框 */
+    input:focus, textarea:focus, select:focus {
+      border-color: #5C7A6B !important;
+      box-shadow: 0 0 0 3px rgba(92,122,107,0.12) !important;
+    }
   </style>
 </head>
 <body>
-  <div id="cms-loading">
-    <div class="logo">若甫<em>记</em></div>
-    <div class="sub">写作后台</div>
-    <div class="spinner"></div>
-  </div>
-
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
   <script>
-    window.addEventListener('load', function () {
-      setTimeout(function () {
-        var el = document.getElementById('cms-loading');
-        if (el) { el.style.opacity = '0'; setTimeout(function () { el.remove(); }, 400); }
-      }, 800);
-    });
-
-    CMS.registerPreviewStyle('/admin/cms-theme.css');
-
+    /* 预览区样式：让预览和前台排版一致 */
+    CMS.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400&family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400&display=swap');
     CMS.registerPreviewStyle([
-      "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400&family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400&display=swap');",
-      "body{font-family:'Lato','Noto Sans SC',sans-serif;color:#444;font-size:0.975rem;line-height:2;font-weight:300;max-width:640px;margin:0 auto;padding:32px 24px;background:#fafaf8;}",
-      "h1{font-family:'DM Serif Display',serif;font-size:2rem;color:#1a1a1a;line-height:1.2;margin-bottom:24px;}",
-      "h2{font-family:'DM Serif Display',serif;font-size:1.35rem;color:#1a1a1a;margin:2.5em 0 0.8em;}",
-      "h3{font-size:0.85rem;color:#1a1a1a;font-weight:500;margin:2em 0 0.6em;letter-spacing:0.08em;text-transform:uppercase;}",
-      "p{margin-bottom:1.5em;}",
-      "blockquote{border-left:2px solid #5C7A6B;padding:10px 0 10px 20px;margin:2em 0;color:#444;font-family:'DM Serif Display',serif;font-style:italic;font-size:1.05rem;}",
-      "code{background:#EEF2F0;border:1px solid #e8e8e8;padding:2px 6px;border-radius:3px;font-size:0.85em;color:#445C50;}",
-      "pre{background:#f4f4f2;border:1px solid #e8e8e8;border-radius:4px;padding:16px;overflow-x:auto;margin:1.5em 0;}",
+      "body{font-family:'Lato','Noto Sans SC',sans-serif;color:#444;font-size:1rem;line-height:1.85;max-width:680px;margin:0 auto;padding:32px 24px;}",
+      "h1,h2,h3{font-family:'DM Serif Display',serif;color:#1a1a1a;}",
+      "h1{font-size:2rem;margin-bottom:24px;}",
+      "h2{font-size:1.4rem;margin:2em 0 0.6em;}",
+      "h3{font-size:1.1rem;margin:1.6em 0 0.5em;}",
+      "blockquote{border-left:2px solid #5C7A6B;padding-left:16px;color:#444;margin:1.2em 0;}",
+      "code{background:#EEF2F0;padding:2px 5px;border-radius:3px;font-size:0.88em;}",
+      "pre{background:#f4f4f2;padding:16px;border-radius:4px;overflow-x:auto;margin:1.2em 0;}",
       "a{color:#5C7A6B;}",
       "img{max-width:100%;border-radius:4px;}"
     ].join(''), { raw: true });
