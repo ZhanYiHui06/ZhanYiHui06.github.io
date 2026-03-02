@@ -4,13 +4,167 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>若甫记 · 后台管理</title>
-<<<<<<< HEAD
-  <!-- Netlify Identity：登录验证 -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-=======
->>>>>>> 47009cda1b14c4e53d149542ef648ee2ca752a79
+  <style>
+    /* ── 全局字体 & 基础 ── */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400&display=swap');
+
+    body {
+      font-family: 'Lato', 'Noto Sans SC', sans-serif !important;
+      background: #f9f9f7 !important;
+    }
+
+    /* ── 顶部导航栏 ── */
+    header[class*="AppHeader"],
+    [class*="AppHeader"],
+    nav[class*="Navbar"] {
+      background: #f9f9f7 !important;
+      border-bottom: 1px solid #e8e8e8 !important;
+    }
+
+    /* ── 主色调覆盖：蓝 → 莫兰迪墨绿 ── */
+    a { color: #5C7A6B; }
+    a:hover { color: #445C50; }
+
+    /* 所有蓝色按钮 → 墨绿 */
+    button[class*="ToolbarButton"],
+    [class*="PublishButton"] button,
+    [class*="DropdownButton"] button,
+    button[class*="Button-green"],
+    [data-testid="toolbar-button"] {
+      background-color: #5C7A6B !important;
+      border-color: #5C7A6B !important;
+      color: #fff !important;
+    }
+    button[class*="ToolbarButton"]:hover,
+    [class*="PublishButton"] button:hover,
+    [class*="DropdownButton"] button:hover,
+    button[class*="Button-green"]:hover,
+    [data-testid="toolbar-button"]:hover {
+      background-color: #445C50 !important;
+      border-color: #445C50 !important;
+    }
+
+    /* 侧栏选中高亮 */
+    [class*="SidebarNavLink"][class*="active"],
+    [class*="SidebarNavLink"]:hover,
+    a[href="#/collections/posts"].css-ixishe,
+    li[class*="active"] a {
+      color: #5C7A6B !important;
+      border-left-color: #5C7A6B !important;
+      background: #EEF2F0 !important;
+    }
+
+    /* 顶栏链接 */
+    [class*="AppHeaderNavLink"],
+    header a {
+      color: #5C7A6B !important;
+    }
+    [class*="AppHeaderNavLink"]:hover,
+    header a:hover {
+      color: #445C50 !important;
+    }
+
+    /* 搜索 / 输入框聚焦边框 */
+    input:focus, textarea:focus, [class*="ControlPane"] input:focus {
+      border-color: #5C7A6B !important;
+      box-shadow: 0 0 0 3px rgba(92,122,107,0.12) !important;
+      outline: none !important;
+    }
+
+    /* 卡片列表 hover */
+    [class*="ListCard"]:hover,
+    [class*="EntryCard"]:hover {
+      border-color: #5C7A6B !important;
+    }
+
+    /* 顶栏站点名 */
+    [class*="AppHeaderSiteLink"],
+    header [class*="Logo"],
+    header span:first-child {
+      font-family: 'DM Serif Display', serif !important;
+      font-style: italic;
+      font-size: 1.15rem !important;
+      color: #1a1a1a !important;
+    }
+
+    /* 编辑器工具栏图标颜色 */
+    [class*="Toolbar"] svg,
+    [class*="toolbar"] button svg {
+      fill: #5C7A6B !important;
+    }
+
+    /* 分支/工作流选项卡 */
+    [class*="TabButton"][class*="active"],
+    [role="tab"][aria-selected="true"] {
+      border-bottom-color: #5C7A6B !important;
+      color: #5C7A6B !important;
+    }
+
+    /* 标签 / 分类小徽章 */
+    [class*="Tag"], [class*="Badge"] {
+      background: #EEF2F0 !important;
+      color: #5C7A6B !important;
+      border: 1px solid #5C7A6B !important;
+    }
+
+    /* 新建按钮 */
+    [class*="CreateNew"],
+    a[href="#/collections/posts/new"] {
+      background: #5C7A6B !important;
+      color: #fff !important;
+    }
+    [class*="CreateNew"]:hover,
+    a[href="#/collections/posts/new"]:hover {
+      background: #445C50 !important;
+    }
+  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // 注册预览样式，让编辑器预览也使用主站字体
+    CMS.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400&display=swap');
+    CMS.registerPreviewStyle(`
+      body {
+        font-family: 'Lato', 'Noto Sans SC', sans-serif;
+        color: #1a1a1a;
+        line-height: 1.85;
+        padding: 32px;
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      h1, h2, h3, h4 {
+        font-family: 'DM Serif Display', serif;
+        color: #1a1a1a;
+        margin: 1.6em 0 0.6em;
+        line-height: 1.3;
+      }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.5rem; }
+      h3 { font-size: 1.2rem; }
+      a { color: #5C7A6B; }
+      code {
+        background: #EEF2F0;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 0.9em;
+      }
+      pre {
+        background: #f4f4f2;
+        padding: 16px;
+        border-radius: 6px;
+        overflow-x: auto;
+      }
+      blockquote {
+        border-left: 3px solid #5C7A6B;
+        padding-left: 16px;
+        color: #444;
+        margin: 1.2em 0;
+      }
+      img { max-width: 100%; border-radius: 6px; }
+      hr { border: none; border-top: 1px solid #e8e8e8; margin: 2em 0; }
+    `, { raw: true });
+  </script>
 </body>
 </html>
