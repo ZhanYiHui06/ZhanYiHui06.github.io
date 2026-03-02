@@ -1,0 +1,333 @@
+/* ================================================
+   若甫记 · Decap CMS 主题覆盖
+   莫兰迪墨绿配色 + 极简白风格
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500&family=Lato:wght@300;400;500&display=swap');
+
+:root {
+  --accent:       #5C7A6B;
+  --accent-dark:  #445C50;
+  --accent-light: #EEF2F0;
+  --ink:          #1a1a1a;
+  --ink-2:        #444;
+  --ink-3:        #888;
+  --ink-4:        #bbb;
+  --border:       #e8e8e8;
+  --bg:           #fafaf8;
+  --white:        #ffffff;
+  --radius:       4px;
+  --sans:         'Lato', 'Noto Sans SC', sans-serif;
+}
+
+/* ── 全局基础 ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body, [class*="App"] {
+  font-family: var(--sans) !important;
+  background: var(--bg) !important;
+  color: var(--ink) !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+/* ── 顶部导航栏 ── */
+[class*="AppHeader"],
+[class*="app-header"],
+header[class] {
+  background: var(--white) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+  height: 56px !important;
+}
+
+/* Logo / 站名 */
+[class*="AppHeaderTitle"],
+[class*="app-header__title"] {
+  font-family: var(--sans) !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--ink) !important;
+  text-transform: uppercase !important;
+}
+
+/* 顶部按钮 */
+[class*="AppHeaderButton"],
+[class*="app-header"] button {
+  font-family: var(--sans) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-3) !important;
+  background: none !important;
+  border: none !important;
+  transition: color 0.2s !important;
+}
+[class*="AppHeaderButton"]:hover { color: var(--ink) !important; }
+
+/* ── 左侧菜单 ── */
+[class*="CollectionView"],
+[class*="sidebar"],
+nav[class] {
+  background: var(--white) !important;
+  border-right: 1px solid var(--border) !important;
+  box-shadow: none !important;
+}
+
+/* 菜单标题 */
+[class*="SidebarHeading"],
+[class*="sidebar-heading"] {
+  font-size: 0.62rem !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-4) !important;
+  font-family: var(--sans) !important;
+  padding: 24px 20px 10px !important;
+}
+
+/* 菜单项 */
+[class*="CollectionTopBar"] a,
+[class*="sidebar"] a,
+[class*="NavLink"] {
+  font-family: var(--sans) !important;
+  font-size: 0.82rem !important;
+  color: var(--ink-3) !important;
+  padding: 10px 20px !important;
+  border-radius: 0 !important;
+  transition: all 0.15s !important;
+  border-left: 2px solid transparent !important;
+}
+
+[class*="NavLink"]:hover,
+[class*="sidebar"] a:hover {
+  color: var(--ink) !important;
+  background: var(--bg) !important;
+}
+
+[class*="NavLink"][class*="active"],
+[class*="sidebar"] a[class*="active"] {
+  color: var(--accent) !important;
+  background: var(--accent-light) !important;
+  border-left-color: var(--accent) !important;
+}
+
+/* ── 文章列表 ── */
+[class*="CollectionView__CollectionMain"],
+[class*="collection-view"] {
+  background: var(--bg) !important;
+}
+
+/* 搜索框 */
+[class*="SearchInput"],
+input[type="search"],
+input[placeholder*="搜索"],
+input[placeholder*="Search"] {
+  font-family: var(--sans) !important;
+  font-size: 0.82rem !important;
+  background: var(--white) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+  padding: 8px 14px !important;
+}
+input[type="search"]:focus,
+[class*="SearchInput"]:focus {
+  border-color: var(--accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(92,122,107,0.12) !important;
+}
+
+/* 文章卡片 */
+[class*="EntryCard"],
+[class*="entry-card"] {
+  background: var(--white) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s, transform 0.2s !important;
+}
+[class*="EntryCard"]:hover {
+  border-color: var(--accent) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
+}
+
+/* 卡片标题 */
+[class*="EntryCard"] h2,
+[class*="EntryCard"] [class*="title"] {
+  font-family: var(--sans) !important;
+  font-size: 0.92rem !important;
+  font-weight: 500 !important;
+  color: var(--ink) !important;
+}
+
+/* 新建按钮 */
+[class*="NewEntryButton"],
+a[href*="new"],
+button[class*="new"] {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+  border: none !important;
+  border-radius: var(--radius) !important;
+  font-family: var(--sans) !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 9px 18px !important;
+  box-shadow: none !important;
+  transition: background 0.2s !important;
+}
+[class*="NewEntryButton"]:hover { background: var(--accent-dark) !important; }
+
+/* ── 编辑器 ── */
+[class*="EditorToolbar"],
+[class*="editor-toolbar"] {
+  background: var(--white) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+  padding: 0 24px !important;
+}
+
+/* 工具栏按钮 */
+[class*="ToolbarButton"],
+[class*="toolbar-button"] {
+  color: var(--ink-3) !important;
+  border-radius: var(--radius) !important;
+  transition: all 0.15s !important;
+}
+[class*="ToolbarButton"]:hover { color: var(--accent) !important; background: var(--accent-light) !important; }
+[class*="ToolbarButton"][class*="active"] { color: var(--accent) !important; background: var(--accent-light) !important; }
+
+/* 保存/发布按钮 */
+button[class*="PublishButton"],
+button[class*="publish"],
+[class*="ToolbarSaveButton"] {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+  border: none !important;
+  border-radius: var(--radius) !important;
+  font-family: var(--sans) !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  box-shadow: none !important;
+  transition: background 0.2s !important;
+}
+button[class*="PublishButton"]:hover { background: var(--accent-dark) !important; }
+
+/* 编辑器主体 */
+[class*="EditorControl"],
+[class*="editor-control"],
+[class*="ControlPane"] {
+  background: var(--white) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+/* 输入框 label */
+[class*="ControlLabel"],
+[class*="control-label"],
+label[class] {
+  font-family: var(--sans) !important;
+  font-size: 0.68rem !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--ink-4) !important;
+  font-weight: 400 !important;
+  margin-bottom: 6px !important;
+}
+
+/* 所有输入框 */
+input[type="text"],
+input[type="email"],
+input[type="date"],
+textarea,
+select,
+[class*="TextInput"],
+[class*="SelectInput"] {
+  font-family: var(--sans) !important;
+  font-size: 0.875rem !important;
+  color: var(--ink) !important;
+  background: var(--bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 9px 13px !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s, box-shadow 0.2s !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(92,122,107,0.12) !important;
+  background: var(--white) !important;
+}
+
+/* Markdown 编辑区 */
+[class*="RawEditor"],
+[data-slate-editor="true"],
+[class*="CodeMirror"],
+.cm-editor {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+  font-size: 0.9rem !important;
+  line-height: 1.9 !important;
+  color: var(--ink) !important;
+  background: var(--white) !important;
+}
+
+/* 富文本编辑器 */
+[class*="EditorPreview"],
+[class*="PreviewPane"] {
+  background: var(--bg) !important;
+  border-left: 1px solid var(--border) !important;
+  font-family: var(--sans) !important;
+}
+
+/* ── 下拉菜单 / 弹窗 ── */
+[class*="Dropdown"],
+[class*="DropdownList"],
+[class*="dropdown"] {
+  background: var(--white) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08) !important;
+}
+
+[class*="DropdownItem"],
+[class*="dropdown-item"] {
+  font-family: var(--sans) !important;
+  font-size: 0.82rem !important;
+  color: var(--ink-2) !important;
+  padding: 9px 16px !important;
+  transition: background 0.15s !important;
+}
+[class*="DropdownItem"]:hover { background: var(--accent-light) !important; color: var(--accent) !important; }
+
+/* ── Toast / 通知 ── */
+[class*="Toast"],
+[class*="toast"],
+[class*="Notification"] {
+  font-family: var(--sans) !important;
+  font-size: 0.8rem !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* 成功通知 */
+[class*="Toast"][class*="success"],
+[class*="notification-success"] {
+  background: var(--accent) !important;
+  color: var(--white) !important;
+  border: none !important;
+}
+
+/* ── 滚动条 ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+
+/* ── 选中色 ── */
+::selection { background: rgba(92,122,107,0.2); }
