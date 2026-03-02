@@ -10,3 +10,6 @@ dist/
 .env
 .env.*
 !.env.example
+
+# 内部文档
+项目交接文档.md

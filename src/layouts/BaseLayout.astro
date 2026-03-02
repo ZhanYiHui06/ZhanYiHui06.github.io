@@ -46,21 +46,28 @@ const currentPath = Astro.url.pathname;
   </footer>
 
   <script>
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
+    window.addEventListener('load', () => {
+      if (!window.netlifyIdentity) return;
+
+      window.netlifyIdentity.on('init', user => {
+        // 处理邀请 / 确认 / 找回密码链接
+        const hash = window.location.hash;
+        if (!user && hash && (
+          hash.includes('invite_token') ||
+          hash.includes('confirmation_token') ||
+          hash.includes('recovery_token')
+        )) {
+          window.netlifyIdentity.open();
+        }
+
+        // 登录后跳转到后台
         if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
+          window.netlifyIdentity.on('login', () => {
+            document.location.href = '/admin/';
           });
         }
       });
-    }
-
-    // 处理邀请链接和密码重置链接
-    const hash = window.location.hash;
-    if (hash && (hash.includes('invite_token') || hash.includes('confirmation_token') || hash.includes('recovery_token'))) {
-      window.netlifyIdentity && window.netlifyIdentity.open();
-    }
+    });
   </script>
 </body>
 </html>

@@ -1,21 +1,12 @@
 backend:
-<<<<<<< HEAD
   name: git-gateway
-=======
-  name: github
-  repo: ZhanYiHui06/ZhanYiHui06.github.io
->>>>>>> 47009cda1b14c4e53d149542ef648ee2ca752a79
   branch: main
 
 media_folder: public/images
 public_folder: /images
 
-<<<<<<< HEAD
-=======
-# 开启身份验证（使用 GitHub 账号登录）
 site_url: https://zhanyihui06.github.io
 
->>>>>>> 47009cda1b14c4e53d149542ef648ee2ca752a79
 collections:
   - name: posts
     label: 文章
