@@ -46,7 +46,6 @@ const currentPath = Astro.url.pathname;
   </footer>
 
   <script>
-    // Netlify Identity 登录后自动跳转到 /admin
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
         if (!user) {
@@ -55,6 +54,12 @@ const currentPath = Astro.url.pathname;
           });
         }
       });
+    }
+
+    // 处理邀请链接和密码重置链接
+    const hash = window.location.hash;
+    if (hash && (hash.includes('invite_token') || hash.includes('confirmation_token') || hash.includes('recovery_token'))) {
+      window.netlifyIdentity && window.netlifyIdentity.open();
     }
   </script>
 </body>
