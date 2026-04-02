@@ -11,10 +11,7 @@
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    // 绕过认证，直接进入后台管理界面
-    window.CMS_MANUAL_INIT = true;
-    
-    // 预览区样式：让预览和前台排版一致
+    /* 预览区样式：让预览和前台排版一致 */
     CMS.registerPreviewStyle('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400&family=DM+Serif+Display:ital@0;1&family=Lato:wght@300;400&display=swap');
     CMS.registerPreviewStyle([
       "body{font-family:'Lato','Noto Sans SC',sans-serif;color:#444;font-size:1rem;line-height:1.85;max-width:680px;margin:0 auto;padding:32px 24px;}",
@@ -28,19 +25,6 @@
       "a{color:#5C7A6B;}",
       "img{max-width:100%;border-radius:4px;}"
     ].join(''), { raw: true });
-    
-    // 手动初始化CMS，跳过认证
-    window.addEventListener('DOMContentLoaded', () => {
-      CMS.init({
-        config: {
-          backend: {
-            name: 'test-repo',
-            branch: 'main'
-          },
-          local_backend: true
-        }
-      });
-    });
   </script>
 </body>
 </html>
