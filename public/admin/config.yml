@@ -1,6 +1,5 @@
 backend:
   name: test-repo
-  branch: main
 
 local_backend: true
 
