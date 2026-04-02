@@ -1,6 +1,7 @@
 backend:
-  name: git-gateway
-  branch: main
+  name: test-repo
+
+local_backend: true
 
 locale: 'zh_Hans'
 
