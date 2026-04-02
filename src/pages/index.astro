@@ -3,13 +3,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('posts');
-const recentPosts = allPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 5);
+const allNotes = await getCollection('notes');
 
 function formatDate(date: Date) {
   return new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric' }).format(new Date(date));
 }
+
+function formatDateTime(date: Date) {
+  return new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(date));
+}
+
+const recentPosts = allPosts
+  .map(post => ({ ...post, type: 'post' }))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 4);
+
+const recentNotes = allNotes
+  .map(note => ({ ...note, type: 'note' }))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 4);
+
+const mixedContent = [...recentPosts, ...recentNotes]
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 8);
 ---
 
 <BaseLayout>
@@ -24,34 +40,55 @@ function formatDate(date: Date) {
       一个对产品、设计与人性充满好奇的探索者。这里有我的行业观察、实用教程，以及偶尔的生活随笔。不追求数量，只求每篇都说点真话。
     </p>
     <div class="tags">
-      <!-- TODO: 修改为你关注的领域标签 -->
       <span class="tag">产品思维</span>
       <span class="tag">用户研究</span>
       <span class="tag">行业洞察</span>
       <span class="tag">工具方法</span>
       <span class="tag">生活随笔</span>
     </div>
-    <a href="/posts" class="cta">
-      阅读文章
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
+    <div class="cta-buttons">
+      <a href="/posts" class="cta">
+        查看文章
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+      <a href="/notes" class="cta secondary">
+        浏览随笔
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
   </section>
 
-  <!-- Recent posts -->
+  <!-- Recent content -->
   <section class="recent">
-    <div class="section-label">最近更新</div>
+    <div class="section-label">最近动态</div>
 
-    {recentPosts.map((post) => (
-      <a href={`/posts/${post.slug}`} class="post-row fade-up">
-        <div class="post-date">{formatDate(post.data.date)}</div>
-        <div class="post-info">
-          <div class="post-title">{post.data.title}</div>
-          <div class="post-excerpt">{post.data.excerpt}</div>
-        </div>
-        <div class="post-tag">{post.data.category}</div>
-      </a>
+    {mixedContent.map((item, index) => (
+      item.type === 'post' ? (
+        <a href={`/posts/${item.slug}`} class="post-row fade-up" style={{ animationDelay: `${index * 0.05}s` }}>
+          <div class="post-date">{formatDate(item.data.date)}</div>
+          <div class="post-info">
+            <div class="post-title">{item.data.title}</div>
+            <div class="post-excerpt">{item.data.excerpt}</div>
+          </div>
+          <div class="post-tag">{item.data.category}</div>
+        </a>
+      ) : (
+        <a href="/notes" class="note-row fade-up" style={{ animationDelay: `${index * 0.05}s` }}>
+          <div class="note-date">{formatDateTime(item.data.date)}</div>
+          <div class="note-content">{item.data.content}</div>
+          {item.data.tags && item.data.tags.length > 0 && (
+            <div class="note-tags">
+              {item.data.tags.slice(0, 2).map((tag: string) => (
+                <span class="note-tag">{tag}</span>
+              ))}
+            </div>
+          )}
+        </a>
+      )
     ))}
   </section>
 </BaseLayout>
@@ -110,7 +147,7 @@ function formatDate(date: Date) {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
   }
 
   .tag {
@@ -123,6 +160,12 @@ function formatDate(date: Date) {
     letter-spacing: 0.04em;
   }
 
+  .cta-buttons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
   .cta {
     display: inline-flex;
     align-items: center;
@@ -133,11 +176,22 @@ function formatDate(date: Date) {
     font-size: 0.78rem;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    transition: background 0.2s;
+    transition: all 0.2s;
     font-family: var(--sans);
   }
 
   .cta:hover { background: var(--accent-dark); }
+
+  .cta.secondary {
+    background: var(--white);
+    color: var(--ink-2);
+    border: 1px solid var(--border);
+  }
+
+  .cta.secondary:hover {
+    background: var(--accent-light);
+    border-color: var(--accent);
+  }
 
   /* Recent */
   .recent {
@@ -196,9 +250,55 @@ function formatDate(date: Date) {
     letter-spacing: 0.04em;
   }
 
+  .note-row {
+    display: block;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .note-row:hover { opacity: 0.7; }
+
+  .note-row:first-of-type { border-top: 1px solid var(--border); }
+
+  .note-date {
+    font-size: 0.65rem;
+    color: var(--accent);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .note-content {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.7;
+    margin-bottom: 10px;
+  }
+
+  .note-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .note-tag {
+    font-size: 0.62rem;
+    color: var(--ink-3);
+    background: var(--accent-light);
+    padding: 2px 8px;
+    border-radius: 12px;
+    letter-spacing: 0.04em;
+  }
+
   @media (max-width: 600px) {
     .hero, .recent { padding-left: 20px; padding-right: 20px; }
     .post-row { grid-template-columns: 56px 1fr; }
     .post-tag { display: none; }
+    .cta-buttons { flex-direction: column; }
+    .cta { justify-content: center; }
   }
 </style>
