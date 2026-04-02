@@ -7,49 +7,7 @@
   <title>若甫记 · 写作后台</title>
   <link rel="icon" href="/favicon.svg" />
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <style>
-    /* 只改主题色：默认蓝 → 莫兰迪墨绿 */
-    [class*="AppHeader"] { background: #fff !important; }
-    a { color: #5C7A6B; }
-    a:hover { color: #445C50; }
-
-    /* 主按钮 */
-    button[class*="Button"][class*="green"],
-    [class*="ToolbarButton"][class*="active"],
-    a[href*="/new"] {
-      background-color: #5C7A6B !important;
-      border-color: #5C7A6B !important;
-    }
-    button[class*="Button"][class*="green"]:hover,
-    a[href*="/new"]:hover {
-      background-color: #445C50 !important;
-      border-color: #445C50 !important;
-    }
-
-    /* 发布按钮 */
-    [class*="PublishButton"] button,
-    [class*="DropdownButton"] button {
-      background-color: #5C7A6B !important;
-      border-color: #5C7A6B !important;
-    }
-    [class*="PublishButton"] button:hover,
-    [class*="DropdownButton"] button:hover {
-      background-color: #445C50 !important;
-      border-color: #445C50 !important;
-    }
-
-    /* 侧栏选中 */
-    [class*="NavLink"][class*="active"] {
-      color: #5C7A6B !important;
-      border-left-color: #5C7A6B !important;
-    }
-
-    /* 聚焦边框 */
-    input:focus, textarea:focus, select:focus {
-      border-color: #5C7A6B !important;
-      box-shadow: 0 0 0 3px rgba(92,122,107,0.12) !important;
-    }
-  </style>
+  <link rel="stylesheet" href="/admin/custom.css" />
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
