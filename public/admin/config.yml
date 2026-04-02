@@ -30,7 +30,7 @@ collections:
       - label: 分类
         name: category
         widget: select
-        options: ["教程", "洞察", "随笔"]
+        options: ["教程", "洞察"]
       - label: 摘要
         name: excerpt
         widget: string
@@ -42,3 +42,24 @@ collections:
       - label: 正文
         name: body
         widget: markdown
+  - name: notes
+    label: 随笔
+    folder: src/content/notes
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    fields:
+      - label: 内容
+        name: content
+        widget: string
+        hint: "一句话或一段话的随笔内容"
+      - label: 发布日期
+        name: date
+        widget: datetime
+        format: "YYYY-MM-DD HH:mm"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm"
+      - label: 标签
+        name: tags
+        widget: list
+        required: false

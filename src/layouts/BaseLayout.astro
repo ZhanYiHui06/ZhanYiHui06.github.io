@@ -35,6 +35,7 @@ const currentPath = Astro.url.pathname;
       <div class="nav-links">
         <a href="/" class:list={['nav-link', { active: currentPath === '/' }]}>首页</a>
         <a href="/posts" class:list={['nav-link', { active: currentPath.startsWith('/posts') }]}>文章</a>
+        <a href="/notes" class:list={['nav-link', { active: currentPath.startsWith('/notes') }]}>随笔</a>
         <a href="/about" class:list={['nav-link', { active: currentPath === '/about' }]}>关于</a>
       </div>
     </div>
