@@ -221,6 +221,19 @@ function readTime(body: string) {
     line-height: 1.7;
   }
 
+  .body :global(.shiki) {
+    font-family: 'JetBrains Mono', monospace;
+    border-radius: 6px;
+    padding: 1.25rem;
+    margin: 1.5em 0;
+    overflow-x: auto;
+  }
+
+  .body :global(.shiki code) {
+    font-size: 0.875rem;
+    line-height: 1.7;
+  }
+
   .body :global(ul), .body :global(ol) {
     padding-left: 1.4em;
     margin-bottom: 1.6em;

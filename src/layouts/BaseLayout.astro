@@ -24,19 +24,28 @@ const currentPath = Astro.url.pathname;
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
-<body>
+<body class="bg-[var(--bg)] text-[var(--ink)] font-sans min-h-screen">
 
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="nav-logo">
-        <img src="/favicon.svg" alt="" width="20" height="20" />
+  <nav class="sticky top-0 z-10 bg-[rgba(249,249,247,0.92)] backdrop-blur-md border-b border-[var(--border)]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-8 h-14 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2 font-serif text-lg text-[var(--ink)]">
+        <img src="/favicon.svg" alt="若甫记" width="20" height="20" />
         若甫记
       </a>
-      <div class="nav-links">
-        <a href="/" class:list={['nav-link', { active: currentPath === '/' }]}>首页</a>
-        <a href="/posts" class:list={['nav-link', { active: currentPath.startsWith('/posts') }]}>文章</a>
-        <a href="/about" class:list={['nav-link', { active: currentPath === '/about' }]}>关于</a>
+      <div class="hidden md:flex gap-7 items-center">
+        <a href="/" class={`text-xs tracking-wider uppercase transition-colors ${currentPath === '/' ? 'text-[var(--ink)]' : 'text-[var(--ink-3)] hover:text-[var(--ink)]'}`}>首页</a>
+        <a href="/posts" class={`text-xs tracking-wider uppercase transition-colors ${currentPath.startsWith('/posts') ? 'text-[var(--ink)]' : 'text-[var(--ink-3)] hover:text-[var(--ink)]'}`}>文章</a>
+        <a href="/categories" class={`text-xs tracking-wider uppercase transition-colors ${currentPath.startsWith('/categories') ? 'text-[var(--ink)]' : 'text-[var(--ink-3)] hover:text-[var(--ink)]'}`}>分类</a>
+        <a href="/tags" class={`text-xs tracking-wider uppercase transition-colors ${currentPath.startsWith('/tags') ? 'text-[var(--ink)]' : 'text-[var(--ink-3)] hover:text-[var(--ink)]'}`}>标签</a>
+        <a href="/about" class={`text-xs tracking-wider uppercase transition-colors ${currentPath === '/about' ? 'text-[var(--ink)]' : 'text-[var(--ink-3)] hover:text-[var(--ink)]'}`}>关于</a>
       </div>
+      <button class="md:hidden text-[var(--ink)]">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
     </div>
   </nav>
 
@@ -44,7 +53,7 @@ const currentPath = Astro.url.pathname;
     <slot />
   </main>
 
-  <footer>
+  <footer class="border-t border-[var(--border)] py-8 px-4 text-center text-xs tracking-wider text-[var(--ink-4)]">
     © {new Date().getFullYear()} 若甫记 · 用文字记录思考
   </footer>
 

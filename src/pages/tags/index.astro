@@ -1,0 +1,54 @@
+---
+import Base---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+
+//---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+
+// 收集所有标签
+const tags = new Set<string>();
+allPosts.forEach(post =>---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+
+// 收集所有标签
+const tags = new Set<string>();
+allPosts.forEach(post => {
+  if (post.data.tags)---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+
+// 收集所有标签
+const tags = new Set<string>();
+allPosts.forEach(post => {
+  if (post.data.tags) {
+    post.data.tags.forEach(tag => tags.add(tag));
+  }
+});---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts');
+
+// 收集所有标签
+const tags = new Set<string>();
+allPosts.forEach(post => {
+  if (post.data.tags) {
+    post.data.tags.forEach(tag => tags.add(tag));
+  }
+});
+
+// 按标签分组
+const postsByTag: Record<string, typeof allPosts
