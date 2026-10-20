@@ -1,0 +1,14 @@
+---
+// Section title: a handwritten image when one is provided, otherwise the
+// title in the handwritten font. The old page pointed at four PNGs that were
+// never shipped, so every title showed a broken-image icon.
+import HandText from "./HandText.astro";
+import { withBase } from "../lib/url";
+
+interface Props {
+  title: string;
+  image?: string;
+}
+const { title, image } = Astro.props;
+---
+{image ? <img class="title-img" src={withBase(image)} alt={title} /> : <HandText text={title} />}

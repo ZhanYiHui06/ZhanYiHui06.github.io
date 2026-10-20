@@ -1,50 +1,78 @@
-name: Deploy to GitHub Pages
+# Every push to main builds the site and publishes it to:
+#   1. your own server (rsync over SSH)  — main site for visitors in China
+#   2. GitHub Pages                      — zero-maintenance mirror / fallback
+# Either target can be switched off with a repository variable (see README).
+name: Deploy
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: deploy
+  cancel-in-progress: true
 
 jobs:
-  build:
+  server:
+    if: vars.DEPLOY_SERVER == 'true'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          SITE_BASE: /
+      - name: Upload to server
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "$SSH_PORT" "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+          # --delay-updates swaps files in at the end, so visitors never see a half-uploaded site
+          rsync -az --delete --delay-updates \
+            -e "ssh -i ~/.ssh/deploy_key -p $SSH_PORT" \
+            dist/ "$SSH_USER@$SSH_HOST:$DEPLOY_PATH/"
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+  pages-build:
+    if: vars.DEPLOY_PAGES != 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - id: pages
+        uses: actions/configure-pages@v5
+      - run: npm ci
+      - run: npm run build
+        env:
+          # "/<repo>" for a project repo, "" for <user>.github.io or a custom domain
+          SITE_BASE: ${{ steps.pages.outputs.base_path }}/
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
-  deploy:
-    needs: build
+  pages-deploy:
+    needs: pages-build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4

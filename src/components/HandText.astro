@@ -1,0 +1,11 @@
+---
+// Splits text into slightly crooked characters — the 拙趣 signature.
+// Done at build time (the old page did it in the browser and double-wrapped
+// nested titles). Screen readers get the plain text instead of single glyphs.
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+const chars = [...text];
+---
+<span class="sr-only">{text}</span><span aria-hidden="true">{chars.map((ch) => (/\s/.test(ch) ? ch : <span class="char">{ch}</span>))}</span>

@@ -1,18 +1,1 @@
-<svg width="498" height="498" viewBox="0 0 498 498" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="498" height="498" rx="130" fill="#5C7A6B"/>
-<g filter="url(#filter0_d_3_3)">
-<path d="M255.788 154.485V191.386H383.549V402H310.792V378.676H360.225V338.642H255.788V401.652H232.812V338.642H161.099V315.665H232.812V278.416H161.099V255.092H232.812V214.71H129.768V401.652H106.444V191.734H232.812V154.485H96V131.509H232.812V96H255.788V131.509H367.536L365.099 126.635C362.314 121.065 359.065 115.727 355.352 110.621L374.15 96.6962C378.328 102.962 382.157 109.461 385.638 116.191C386.102 116.887 386.799 118.048 387.727 119.672C387.959 120.369 388.191 120.833 388.423 121.065L390.512 125.242C390.976 126.403 391.672 128.027 392.601 130.116C394.225 133.597 396.314 138.703 398.867 145.433C399.331 146.826 399.795 147.87 400.259 148.567L401.652 153.44C401.884 153.44 402 153.556 402 153.788H401.304H400.259L397.823 154.137L388.075 154.485C384.594 154.485 379.256 154.485 372.061 154.485C369.973 154.485 368.464 154.485 367.536 154.485H255.788ZM360.225 315.665V278.416H255.788V315.665H360.225ZM255.788 214.71V255.092H360.225V214.71H255.788Z" fill="#F6F8E3"/>
-</g>
-<defs>
-<filter id="filter0_d_3_3" x="80.1" y="80.1" width="345.8" height="345.8" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-<feOffset dx="4" dy="4"/>
-<feGaussianBlur stdDeviation="9.95"/>
-<feComposite in2="hardAlpha" operator="out"/>
-<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.41 0"/>
-<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_3_3"/>
-<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_3_3" result="shape"/>
-</filter>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#FCFBF8"/><path d="M8 9c5-2 12-2 16 0 2 5 2 10 0 15-5 2-11 2-16 0-2-5-2-10 0-15z" fill="none" stroke="#1A1A1A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="16.5" r="3.4" fill="#E8A0A8"/></svg>

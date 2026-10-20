@@ -1,0 +1,116 @@
+# ============================================================
+#  个人主页的全部内容都在这个文件里。
+#  改完保存、提交（GitHub 网页上直接编辑也行），网站会自动重新构建并发布。
+#
+#  小提示：
+#  - 字段名（冒号左边）不要改，只改冒号右边的内容。
+#  - 文字里有冒号、# 等符号时，用英文双引号包起来："像这样：没问题"
+#  - 想隐藏某个链接，把它的 href 留空即可；整条删掉也行。
+#  - 标记为 hand 的文字会用手写体渲染，字体会在构建时自动按需裁剪。
+# ============================================================
+
+meta:
+  # 浏览器标签页标题、搜索引擎与分享卡片上的描述
+  title: 你的名字 · 个人主页
+  description: 计算机本科大三，寻找产品经理 / 产品运营方向的实习与校招机会。
+  # 网站正式域名（用于 canonical 和分享卡片），没有域名就先留空
+  url: ""
+
+# 顶部占位提示；内容换成真的之后，把它改成 "" 就不显示了
+draftNote: 占位稿 · 把名字、项目、数据换成你的真实内容即可
+
+name: 你的名字 # hand
+
+nav:
+  - { label: 项目, target: work }
+  - { label: 校企, target: collab }
+  - { label: 科研, target: lab }
+  - { label: 联系, target: contact }
+
+hero:
+  kicker: PRODUCT · CAMPUS · RESEARCH
+  greeting: 你好，我是 # hand，后面会自动接上 name
+  tagline: 想做产品，也爱把事办成 # hand
+  lead: 计算机本科大三。做过科研与项目，当过校园大使，也把校企活动真正落地过。现在想找产品或产品运营相关的机会。
+  meta:
+    - 目标：产品经理 / 产品运营
+    - 某某大学 · 计算机科学与技术
+    - 开放实习 / 校招
+
+work:
+  title: 项目 # hand
+  # titleImage: /images/title-项目.png   # 有手写标题图片就放进 public/images/ 并取消这行注释
+  en: Selected work
+  intro: 不按时间堆简历，按「能不能说明你会什么」挑三件。
+  items:
+    - name: 项目 A · 某某产品 / 系统
+      role: 产品负责人 · 约 2 个月
+      summary: 发现某类用户在具体场景里卡住，用访谈和数据定义问题，再拆出最小可验证方案，推动上线并根据反馈迭代。
+      facts:
+        - { label: 动作, value: 用户调研 · 优先级 · 上线跟进 }
+        - { label: 结果, value: 核心转化 +32%（占位） }
+    - name: 项目 B · 某某活动 / 运营
+      role: 产品运营 · 约 1 个月
+      summary: 把「想让人来」拆成触达、参与、完成三段，设计机制和内容节奏，活动结束后留下可复用的流程，而不是热闹一场就散。
+      facts:
+        - { label: 动作, value: 机制设计 · 内容 · 复盘 }
+        - { label: 结果, value: 参与 1.8k · 完成率 41%（占位） }
+    - name: 项目 C · 科研向技术项目
+      role: 核心成员 · 一学期
+      summary: 问题能验证、方法能复现、结论能讲清楚。科研给我的是一种产品训练：少说「我觉得」，多问「怎么证明」。
+      facts:
+        - { label: 动作, value: 实验 · 原型 · 路演 }
+        - { label: 结果, value: 课程 / 赛事 Top 10%（占位） }
+
+collab:
+  title: 校企 # hand
+  en: Campus & partnership
+  intro: 校园大使与校企活动：证明我能在人和事中间把事情推进完。
+  items:
+    - name: 校园大使 · 某某公司
+      when: 2024.xx — 至今
+      summary: 把品牌目标翻译成学校里真正能发生的动作，并让团队有节奏地跑完。
+      points:
+        - 组队分工，活动不靠一个人硬扛
+        - 对接企业资源，宣讲 / 工作坊 / 竞赛落地
+        - 记录到场与反馈，方便下一场改方案
+    - name: 校企联合活动 · 某某主题
+      when: 2024.xx
+      summary: 从提案到复盘的完整闭环；先定成功标准，再谈执行细节。
+      points:
+        - 明确到场 / 完成 / 满意度目标
+        - 流程清单与现场风险预案
+        - 会后反馈与二次转化
+
+lab:
+  title: 科研 # hand
+  en: Research
+  intro: 压缩展示：深度与严谨，不抢项目的戏。
+  items:
+    - year: "2024"
+      name: 论文 / 课题名称（占位）
+      summary: 一句话说明研究问题与你的贡献。
+      badge: 在投 / 已录用
+    - year: "2023"
+      name: 实验室 / 导师课题
+      summary: 数据、实验、原型或写作中的具体角色。
+      badge: 核心成员
+    - year: "2023"
+      name: 课程大作业 / 创新项目
+      summary: 偏应用就用「问题—方法—结论」收束。
+      badge: 完成
+
+note:
+  title: 认真，但不端着 # hand
+  paragraphs:
+    - 科研训练我定义问题、控制变量、对结论负责；活动训练我在人多、资源杂的时候仍能把事推完。
+    - 做产品时，我更在意：用户卡在哪里，我们怎么验证，以及下一版改什么。
+
+contact:
+  title: 来聊聊 # hand
+  lead: 正在寻找产品 / 产品运营相关实习或校招机会。岗位、项目，或只想看看完整简历，都可以。
+  links:
+    - { label: you@example.com, href: "mailto:you@example.com" }
+    # 简历 PDF 放到 public/ 目录，比如 public/resume.pdf，然后把 href 改成 /resume.pdf
+    - { label: 下载简历, href: "" }
+    - { label: GitHub, href: "" }
