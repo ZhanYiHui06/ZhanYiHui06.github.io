@@ -12,6 +12,9 @@ const SITE_YAML = resolve(process.cwd(), "src/content/site.yaml");
 const text = z.string().trim().min(1);
 const optionalText = z.string().trim().optional().default("");
 const link = z.object({ label: text, href: optionalText });
+// Pictures stacked beside an item; only the first three show, the rest wait
+// behind the stack and come forward as the visitor clicks through.
+const images = z.array(z.object({ src: text, alt: optionalText })).default([]);
 
 // Each layout keeps the look of one block of the original page.
 const rowItem = z.object({
@@ -20,6 +23,7 @@ const rowItem = z.object({
   summary: optionalText,
   facts: z.array(z.object({ label: text, value: text })).default([]),
   links: z.array(link).default([]),
+  images,
 });
 
 const cardItem = z.object({
@@ -35,6 +39,7 @@ const listItem = z.object({
   summary: optionalText,
   badge: optionalText,
   links: z.array(link).default([]),
+  images,
 });
 
 const sectionHead = {

@@ -1,9 +1,10 @@
 /* 喜茶留白 · 手写拙趣
    Breakpoints (keep in sync with src/scripts/nav.ts):
    - ≤ 980px   narrow top bar, single-column sections
-   - ≥ 1280px  nav morphs into a left rail once you scroll. Below 1280 there is
-               not enough margin left of the content for the 156px rail, which
-               is why the old page's rail covered the text at 981–1243px. */
+   - ≥ 1360px  nav morphs into a left rail once you scroll. Narrower than that
+               there is not enough margin left of the 900px content for the
+               156px rail plus its 64px gap (the old page's rail covered the
+               text at 981–1243px for this reason). */
 
 :root {
   --bg: #FCFBF8;
@@ -22,7 +23,7 @@
 
 @media (min-width: 900px) {
   :root {
-    --content: 780px;
+    --content: 900px;
     --gutter: 48px;
   }
 }
@@ -38,7 +39,7 @@ html {
   scroll-padding-top: calc(var(--nav-h) + 24px);
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1360px) {
   /* anchor jumps land below the fold line, where the nav is already a rail */
   html { scroll-padding-top: 40px; }
 }
@@ -216,7 +217,7 @@ a:focus-visible {
   .top-nav a.is-active::after { bottom: -4px; }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1360px) {
   .site-nav {
     transition:
       top 0.65s var(--ease-morph),
@@ -679,14 +680,114 @@ a:focus-visible {
 }
 
 .research-item .badge {
+  margin-bottom: 4px;
   font-size: 12px;
   color: var(--accent);
-  white-space: nowrap;
 }
 
 /* research titles are full English paper titles; let them break anywhere */
 .research-item > div { min-width: 0; }
 .research-item h3 { overflow-wrap: anywhere; }
+
+/* ——— image stacks beside products and papers ——— */
+.project.has-stack,
+.research-item.has-stack { column-gap: 40px; }
+
+.project.has-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+}
+
+.project-body { min-width: 0; }
+
+.stack-wrap {
+  --stack-w: 184px;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  /* room for the fanned cards behind the front one */
+  padding: 10px 6px 0 22px;
+}
+
+.research-item .stack-wrap { --stack-w: 150px; align-self: center; }
+
+.stack {
+  position: relative;
+  width: var(--stack-w);
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.stack:disabled { cursor: default; }
+
+.stack:focus-visible {
+  outline: 2px solid var(--pink-dot);
+  outline-offset: 10px;
+  border-radius: 12px;
+}
+
+.stack-card {
+  --tx: 0px;
+  --ty: 0px;
+  --rot: 0deg;
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  border: 4px solid #fff;
+  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.08), 0 8px 22px -10px rgba(26, 26, 26, 0.28);
+  transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+  transform-origin: 50% 90%;
+  transition:
+    transform 0.5s cubic-bezier(0.34, 1.45, 0.5, 1),
+    opacity 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.stack-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.stack-card[data-depth="0"] { z-index: 4; --rot: 2deg; }
+.stack-card[data-depth="1"] { z-index: 3; --tx: -10px; --ty: 4px; --rot: -4deg; }
+.stack-card[data-depth="2"] { z-index: 2; --tx: -20px; --ty: 9px; --rot: -9deg; }
+/* the fourth card onward waits hidden right behind the third */
+.stack-card[data-depth="3"] { z-index: 1; --tx: -20px; --ty: 9px; --rot: -9deg; opacity: 0; }
+
+@media (hover: hover) {
+  .stack:not(:disabled):hover .stack-card[data-depth="0"]:not(.is-lifting) { --ty: -4px; --rot: 3.5deg; }
+  .stack:not(:disabled):hover .stack-card[data-depth="1"]:not(.is-lifting) { --tx: -16px; --rot: -6deg; }
+  .stack:not(:disabled):hover .stack-card[data-depth="2"]:not(.is-lifting) { --tx: -30px; --ty: 11px; --rot: -13deg; }
+}
+
+/* the front card flies up and to the right, then tucks under the pile */
+.stack-card.is-lifting {
+  z-index: 5;
+  --tx: 46%;
+  --ty: -16%;
+  --rot: 16deg;
+  transition: transform 0.26s cubic-bezier(0.3, 0.7, 0.4, 1);
+  box-shadow: 0 2px 4px rgba(26, 26, 26, 0.08), 0 18px 32px -12px rgba(26, 26, 26, 0.35);
+}
+
+.stack-card.is-tucking { z-index: 0 !important; }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .stack-card { transition: opacity 0.2s ease; }
+}
 
 /* ——— taste: photos + playlist ——— */
 .taste {
@@ -846,7 +947,11 @@ a:focus-visible {
     gap: 6px;
   }
 
-  .research-item .badge { order: -1; }
+  /* stacks drop below the text, left-aligned with it */
+  .project.has-stack { grid-template-columns: 1fr; row-gap: 20px; }
+  .stack-wrap { justify-self: start; padding: 8px 0 0 24px; }
+  .research-item .stack-wrap { margin-top: 14px; }
+
 
   .menu { padding: 28px 22px 22px; }
   .menu-line { flex-wrap: wrap; gap: 6px 10px; }

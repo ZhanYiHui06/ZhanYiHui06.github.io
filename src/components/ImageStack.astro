@@ -1,0 +1,30 @@
+---
+// A small fanned stack of pictures. Up to three show; clicking sends the front
+// one to the back and the next slides forward (src/scripts/stack.ts).
+import { withBase } from "../lib/url";
+
+interface Props {
+  images: { src: string; alt: string }[];
+  label: string;
+}
+const { images, label } = Astro.props;
+const total = images.length;
+---
+{total > 0 && (
+  <div class="stack-wrap">
+    <button
+      type="button"
+      class="stack"
+      data-stack
+      data-total={total}
+      aria-label={total > 1 ? `${label}的图片，第 1 张，共 ${total} 张，点击换下一张` : `${label}的图片`}
+      disabled={total < 2}
+    >
+      {images.map((img, i) => (
+        <span class="stack-card" data-depth={Math.min(i, 3)}>
+          <img src={withBase(img.src)} alt={img.alt || `${label} 图 ${i + 1}`} loading="lazy" decoding="async" />
+        </span>
+      ))}
+    </button>
+  </div>
+)}
