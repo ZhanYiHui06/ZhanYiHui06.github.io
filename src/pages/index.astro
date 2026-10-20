@@ -6,10 +6,13 @@ import { loadSite } from "../lib/content.mjs";
 import { withBase, isExternal } from "../lib/url";
 
 const site = loadSite();
-const { hero, work, collab, lab, note, contact } = site;
+const { hero, menu, sections, note, contact } = site;
 
 // links with an empty href are hidden rather than rendered as dead "#" links
-const contactLinks = contact.links.filter((l) => l.href);
+const shown = (links: { label: string; href: string }[]) => links.filter((l) => l.href);
+const contactLinks = shown(contact.links);
+const linkAttrs = (href: string) =>
+  isExternal(href) ? { href, target: "_blank", rel: "noopener" } : { href: withBase(href) };
 
 const updated = new Intl.DateTimeFormat("zh-CN", {
   timeZone: "Asia/Shanghai",
@@ -44,67 +47,128 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
       {hero.meta.length > 0 && <ul class="hero-meta">{hero.meta.map((m) => <li>{m}</li>)}</ul>}
     </section>
 
-    <section class="section" id="work">
-      <div class="section-head">
-        <h2 class="hand"><SectionTitle title={work.title} image={work.titleImage} /></h2>
-        {work.en && <div class="en" lang="en">{work.en}</div>}
-      </div>
-      {work.intro && <p class="section-intro">{work.intro}</p>}
-      <div class="projects">
-        {work.items.map((p) => (
-          <article class="project">
-            <div class="project-top">
-              <h3>{p.name}</h3>
-              {p.role && <div class="role">{p.role}</div>}
-            </div>
-            {p.summary && <p>{p.summary}</p>}
-            {p.facts.length > 0 && (
-              <div class="facts">
-                {p.facts.map((f) => <span><strong>{f.label}</strong>{f.value}</span>)}
+    {menu && menu.items.length > 0 && (
+      <section class="menu" aria-labelledby="menu-title">
+        <svg class="menu-frame" viewBox="0 0 400 300" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M8 10 C90 4, 200 7, 300 6 C350 5, 380 8, 392 12 C396 80, 394 160, 395 220 C396 260, 394 280, 390 292 C300 297, 200 295, 120 296 C70 297, 30 295, 10 290 C5 230, 7 160, 6 100 C5 60, 6 30, 8 10 Z" />
+        </svg>
+        <div class="menu-head">
+          <h2 class="hand" id="menu-title"><HandText text={menu.title} /></h2>
+          {menu.en && <span class="en" lang="en">{menu.en}</span>}
+        </div>
+        <ol class="menu-list">
+          {menu.items.map((m) => (
+            <li>
+              <a class="menu-item" href={`#${m.target}`}>
+                <span class="menu-line">
+                  <span class="menu-name hand"><HandText text={m.name} /></span>
+                  {m.tag && <span class="menu-tag">{m.tag}</span>}
+                  <span class="menu-dots" aria-hidden="true"></span>
+                  <span class="menu-go" aria-hidden="true">→</span>
+                </span>
+                {m.desc && <span class="menu-desc">{m.desc}</span>}
+                {m.ingredients && <span class="menu-ing"><span class="menu-ing-label">配料</span>{m.ingredients}</span>}
+              </a>
+            </li>
+          ))}
+        </ol>
+        {menu.footnote && <p class="menu-foot">{menu.footnote}</p>}
+      </section>
+    )}
+
+    {sections.map((s) => (
+      <section class="section" id={s.id}>
+        <div class="section-head">
+          <h2 class="hand"><SectionTitle title={s.title} image={s.titleImage} /></h2>
+          {s.en && <div class="en" lang="en">{s.en}</div>}
+        </div>
+        {s.intro && <p class="section-intro">{s.intro}</p>}
+
+        {s.layout === "rows" && (
+          <div class="projects">
+            {s.items.map((p) => (
+              <article class="project">
+                <div class="project-top">
+                  <h3>{p.name}</h3>
+                  {p.role && <div class="role">{p.role}</div>}
+                </div>
+                {p.summary && <p>{p.summary}</p>}
+                {p.facts.length > 0 && (
+                  <div class="facts">
+                    {p.facts.map((f) => <span><strong>{f.label}</strong>{f.value}</span>)}
+                  </div>
+                )}
+                {shown(p.links).length > 0 && (
+                  <div class="item-links">{shown(p.links).map((l) => <a {...linkAttrs(l.href)}>{l.label} ↗</a>)}</div>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+
+        {s.layout === "cards" && (
+          <div class="collab-grid">
+            {s.items.map((c) => (
+              <article class="collab">
+                <h3>{c.name}</h3>
+                {c.when && <div class="when">{c.when}</div>}
+                {c.summary && <p>{c.summary}</p>}
+                {c.points.length > 0 && <ul>{c.points.map((pt) => <li>{pt}</li>)}</ul>}
+              </article>
+            ))}
+          </div>
+        )}
+
+        {s.layout === "list" && (
+          <div class="research-list">
+            {s.items.map((r) => (
+              <article class="research-item">
+                <div class="year">{r.year}</div>
+                <div>
+                  <h3>{r.name}</h3>
+                  {r.summary && <p>{r.summary}</p>}
+                  {shown(r.links).length > 0 && (
+                    <div class="item-links">{shown(r.links).map((l) => <a {...linkAttrs(l.href)}>{l.label} ↗</a>)}</div>
+                  )}
+                </div>
+                {r.badge && <div class="badge">{r.badge}</div>}
+              </article>
+            ))}
+          </div>
+        )}
+
+        {s.layout === "taste" && (
+          <div class="taste">
+            {s.photos.length > 0 && (
+              <div class="photos">
+                {s.photos.map((ph) => (
+                  <figure class="photo">
+                    <img src={withBase(ph.src)} alt={ph.alt || ph.caption} loading="lazy" decoding="async" />
+                    {ph.caption && <figcaption>{ph.caption}</figcaption>}
+                  </figure>
+                ))}
               </div>
             )}
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="section" id="collab">
-      <div class="section-head">
-        <h2 class="hand"><SectionTitle title={collab.title} image={collab.titleImage} /></h2>
-        {collab.en && <div class="en" lang="en">{collab.en}</div>}
-      </div>
-      {collab.intro && <p class="section-intro">{collab.intro}</p>}
-      <div class="collab-grid">
-        {collab.items.map((c) => (
-          <article class="collab">
-            <h3>{c.name}</h3>
-            {c.when && <div class="when">{c.when}</div>}
-            {c.summary && <p>{c.summary}</p>}
-            {c.points.length > 0 && <ul>{c.points.map((pt) => <li>{pt}</li>)}</ul>}
-          </article>
-        ))}
-      </div>
-    </section>
-
-    <section class="section" id="lab">
-      <div class="section-head">
-        <h2 class="hand"><SectionTitle title={lab.title} image={lab.titleImage} /></h2>
-        {lab.en && <div class="en" lang="en">{lab.en}</div>}
-      </div>
-      {lab.intro && <p class="section-intro">{lab.intro}</p>}
-      <div class="research-list">
-        {lab.items.map((r) => (
-          <article class="research-item">
-            <div class="year">{r.year}</div>
-            <div>
-              <h3>{r.name}</h3>
-              {r.summary && <p>{r.summary}</p>}
-            </div>
-            {r.badge && <div class="badge">{r.badge}</div>}
-          </article>
-        ))}
-      </div>
-    </section>
+            {s.tracks.length > 0 && (
+              <div class="playlist">
+                <ol class="tracks">
+                  {s.tracks.map((t) => (
+                    <li class="track">
+                      <span class="track-main">
+                        {t.href ? <a {...linkAttrs(t.href)}>{t.title}</a> : <span>{t.title}</span>}
+                        {t.artist && <span class="track-artist">{t.artist}</span>}
+                      </span>
+                      {t.note && <span class="track-note">{t.note}</span>}
+                    </li>
+                  ))}
+                </ol>
+                {s.playlist?.href && <div class="item-links"><a {...linkAttrs(s.playlist.href)}>{s.playlist.label} ↗</a></div>}
+              </div>
+            )}
+          </div>
+        )}
+      </section>
+    ))}
 
     <section class="note-strip" aria-labelledby="note-title">
       <h2 class="title hand" id="note-title"><HandText text={note.title} /></h2>
@@ -116,13 +180,7 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
       {contact.lead && <p class="contact-lead">{contact.lead}</p>}
       {contactLinks.length > 0 && (
         <div class="contact-links">
-          {contactLinks.map((l) =>
-            isExternal(l.href) ? (
-              <a href={l.href} target="_blank" rel="noopener">{l.label}</a>
-            ) : (
-              <a href={withBase(l.href)}>{l.label}</a>
-            )
-          )}
+          {contactLinks.map((l) => <a {...linkAttrs(l.href)}>{l.label}</a>)}
         </div>
       )}
     </section>
