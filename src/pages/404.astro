@@ -1,0 +1,14 @@
+---
+import Base from "../layouts/Base.astro";
+import HandText from "../components/HandText.astro";
+// glyphs used here are listed in handTexts() in src/lib/content.mjs
+---
+<Base title="404 · 找不到这一页" noindex>
+  <main class="page">
+    <section class="hero">
+      <p class="hero-kicker">404</p>
+      <h1 class="hand"><HandText text="找不到这一页" /></h1>
+      <p class="hero-lead"><a class="hand" href={import.meta.env.BASE_URL} style="font-size: 22px; border-bottom: 1px solid currentColor;"><HandText text="回首页" /></a></p>
+    </section>
+  </main>
+</Base>

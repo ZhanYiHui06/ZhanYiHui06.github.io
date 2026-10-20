@@ -1,15 +1,4 @@
-# Dependencies
 node_modules/
-
-# Build output
 dist/
 .astro/
-
-# Misc
-.DS_Store
-.env
-.env.*
-!.env.example
-
-# 内部文档
-项目交接文档.md
+src/generated/

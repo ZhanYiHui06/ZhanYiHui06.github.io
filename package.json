@@ -1,14 +1,21 @@
 {
-  "name": "ruofu-blog",
+  "name": "personal-page",
+  "private": true,
   "type": "module",
-  "version": "1.0.0",
   "scripts": {
+    "font": "node scripts/subset-font.mjs",
+    "predev": "npm run font",
     "dev": "astro dev",
+    "prebuild": "npm run font",
     "build": "astro build",
     "preview": "astro preview"
   },
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.13",
-    "astro": "^5.18.0"
+    "astro": "^7.4.1",
+    "subset-font": "^2.9.0",
+    "yaml": "^2.9.1"
   }
 }

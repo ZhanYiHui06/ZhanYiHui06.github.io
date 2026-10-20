@@ -1,204 +1,136 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import Base from "../layouts/Base.astro";
+import HandText from "../components/HandText.astro";
+import SectionTitle from "../components/SectionTitle.astro";
+import { loadSite } from "../lib/content.mjs";
+import { withBase, isExternal } from "../lib/url";
 
-const allPosts = await getCollection('posts');
-const recentPosts = allPosts
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 5);
+const site = loadSite();
+const { hero, work, collab, lab, note, contact } = site;
 
-function formatDate(date: Date) {
-  return new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric' }).format(new Date(date));
-}
+// links with an empty href are hidden rather than rendered as dead "#" links
+const contactLinks = contact.links.filter((l) => l.href);
+
+const updated = new Intl.DateTimeFormat("zh-CN", {
+  timeZone: "Asia/Shanghai",
+  year: "numeric",
+  month: "2-digit",
+}).format(new Date());
 ---
+<Base>
+  <a class="skip-link" href="#main">跳到正文</a>
 
-<BaseLayout>
-  <!-- Hero -->
-  <section class="hero">
-    <div class="greeting">小小产品人的学习日志</div>
-    <h1 class="name">
-      你好，我是 <em>Ruofu</em><br />
-      在这里记录思考
-    </h1>
-    <p class="desc">
-      一个对产品、设计与人性充满好奇的探索者。这里有我的行业观察、实用教程，以及偶尔的生活随笔。不追求数量，只求每篇都说点真话。
-    </p>
-    <div class="tags">
-      <!-- TODO: 修改为你关注的领域标签 -->
-      <span class="tag">产品思维</span>
-      <span class="tag">用户研究</span>
-      <span class="tag">行业洞察</span>
-      <span class="tag">工具方法</span>
-      <span class="tag">生活随笔</span>
-    </div>
-    <a href="/posts" class="cta">
-      阅读文章
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-        <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </a>
-  </section>
+  <header class="site-nav is-top" id="site-nav">
+    <svg class="hand-frame" viewBox="0 0 156 220" preserveAspectRatio="none" aria-hidden="true">
+      <!-- irregular hand-drawn frame, inset so the stroke never sits under glyphs -->
+      <path d="M10 14 C30 7, 55 9, 78 8 C102 7, 128 10, 146 16 C150 50, 149 90, 148 120 C147 150, 150 178, 144 204 C120 212, 95 215, 78 216 C55 217, 28 212, 12 202 C8 170, 9 140, 8 112 C7 80, 6 42, 10 14 Z" />
+    </svg>
+    <a class="top-mark hand" href="#top"><HandText text={site.name} /></a>
+    <nav class="top-nav" aria-label="导航">
+      {site.nav.map((item) => <a href={`#${item.target}`}>{item.label}</a>)}
+    </nav>
+  </header>
 
-  <!-- Recent posts -->
-  <section class="recent">
-    <div class="section-label">最近更新</div>
+  <main class="page" id="top">
+    {site.draftNote && <p class="placeholder">{site.draftNote}</p>}
 
-    {recentPosts.map((post) => (
-      <a href={`/posts/${post.slug}`} class="post-row fade-up">
-        <div class="post-date">{formatDate(post.data.date)}</div>
-        <div class="post-info">
-          <div class="post-title">{post.data.title}</div>
-          <div class="post-excerpt">{post.data.excerpt}</div>
+    <section class="hero" aria-labelledby="hero-title" id="main" tabindex="-1">
+      {hero.kicker && <p class="hero-kicker">{hero.kicker}</p>}
+      <h1 id="hero-title" class="hand">
+        <HandText text={`${hero.greeting}${site.name}`} />
+        {hero.tagline && <span class="sub"><HandText text={hero.tagline} /></span>}
+      </h1>
+      {hero.lead && <p class="hero-lead">{hero.lead}</p>}
+      {hero.meta.length > 0 && <ul class="hero-meta">{hero.meta.map((m) => <li>{m}</li>)}</ul>}
+    </section>
+
+    <section class="section" id="work">
+      <div class="section-head">
+        <h2 class="hand"><SectionTitle title={work.title} image={work.titleImage} /></h2>
+        {work.en && <div class="en" lang="en">{work.en}</div>}
+      </div>
+      {work.intro && <p class="section-intro">{work.intro}</p>}
+      <div class="projects">
+        {work.items.map((p) => (
+          <article class="project">
+            <div class="project-top">
+              <h3>{p.name}</h3>
+              {p.role && <div class="role">{p.role}</div>}
+            </div>
+            {p.summary && <p>{p.summary}</p>}
+            {p.facts.length > 0 && (
+              <div class="facts">
+                {p.facts.map((f) => <span><strong>{f.label}</strong>{f.value}</span>)}
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="collab">
+      <div class="section-head">
+        <h2 class="hand"><SectionTitle title={collab.title} image={collab.titleImage} /></h2>
+        {collab.en && <div class="en" lang="en">{collab.en}</div>}
+      </div>
+      {collab.intro && <p class="section-intro">{collab.intro}</p>}
+      <div class="collab-grid">
+        {collab.items.map((c) => (
+          <article class="collab">
+            <h3>{c.name}</h3>
+            {c.when && <div class="when">{c.when}</div>}
+            {c.summary && <p>{c.summary}</p>}
+            {c.points.length > 0 && <ul>{c.points.map((pt) => <li>{pt}</li>)}</ul>}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="lab">
+      <div class="section-head">
+        <h2 class="hand"><SectionTitle title={lab.title} image={lab.titleImage} /></h2>
+        {lab.en && <div class="en" lang="en">{lab.en}</div>}
+      </div>
+      {lab.intro && <p class="section-intro">{lab.intro}</p>}
+      <div class="research-list">
+        {lab.items.map((r) => (
+          <article class="research-item">
+            <div class="year">{r.year}</div>
+            <div>
+              <h3>{r.name}</h3>
+              {r.summary && <p>{r.summary}</p>}
+            </div>
+            {r.badge && <div class="badge">{r.badge}</div>}
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="note-strip" aria-labelledby="note-title">
+      <h2 class="title hand" id="note-title"><HandText text={note.title} /></h2>
+      <div>{note.paragraphs.map((t) => <p>{t}</p>)}</div>
+    </section>
+
+    <section class="contact" id="contact">
+      <h2 class="hand"><SectionTitle title={contact.title} image={contact.titleImage} /></h2>
+      {contact.lead && <p class="contact-lead">{contact.lead}</p>}
+      {contactLinks.length > 0 && (
+        <div class="contact-links">
+          {contactLinks.map((l) =>
+            isExternal(l.href) ? (
+              <a href={l.href} target="_blank" rel="noopener">{l.label}</a>
+            ) : (
+              <a href={withBase(l.href)}>{l.label}</a>
+            )
+          )}
         </div>
-        <div class="post-tag">{post.data.category}</div>
-      </a>
-    ))}
-  </section>
-</BaseLayout>
+      )}
+    </section>
 
-<style>
-  /* Hero */
-  .hero {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 80px 32px 64px;
-  }
+    <p class="foot">最后更新 · {updated}</p>
+  </main>
 
-  .greeting {
-    font-size: 0.72rem;
-    color: var(--ink-3);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .greeting::before {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 1px;
-    background: var(--ink-4);
-  }
-
-  .name {
-    font-family: var(--serif);
-    font-size: clamp(2.2rem, 5vw, 3.2rem);
-    line-height: 1.15;
-    color: var(--ink);
-    margin-bottom: 20px;
-    letter-spacing: -0.01em;
-  }
-
-  .name em {
-    font-style: italic;
-    color: var(--accent);
-  }
-
-  .desc {
-    font-size: 1rem;
-    color: var(--ink-2);
-    line-height: 1.85;
-    max-width: 520px;
-    font-weight: 300;
-    margin-bottom: 32px;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 40px;
-  }
-
-  .tag {
-    background: var(--white);
-    border: 1px solid var(--border);
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 0.72rem;
-    color: var(--ink-3);
-    letter-spacing: 0.04em;
-  }
-
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--accent);
-    color: var(--white);
-    padding: 11px 22px;
-    font-size: 0.78rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    transition: background 0.2s;
-    font-family: var(--sans);
-  }
-
-  .cta:hover { background: var(--accent-dark); }
-
-  /* Recent */
-  .recent {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 0 32px 80px;
-  }
-
-  .post-row {
-    display: grid;
-    grid-template-columns: 72px 1fr auto;
-    gap: 0 24px;
-    align-items: start;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
-  .post-row:hover { opacity: 0.7; }
-  .post-row:hover .post-title { color: var(--accent); }
-  .post-row:first-of-type { border-top: 1px solid var(--border); }
-
-  .post-date {
-    font-size: 0.7rem;
-    color: var(--ink-4);
-    font-weight: 300;
-    padding-top: 3px;
-    letter-spacing: 0.04em;
-  }
-
-  .post-title {
-    font-family: var(--serif);
-    font-size: 1.05rem;
-    color: var(--ink);
-    line-height: 1.4;
-    margin-bottom: 4px;
-    transition: color 0.2s;
-  }
-
-  .post-excerpt {
-    font-size: 0.78rem;
-    color: var(--ink-3);
-    line-height: 1.6;
-    font-weight: 300;
-  }
-
-  .post-tag {
-    font-size: 0.62rem;
-    color: var(--ink-3);
-    border: 1px solid var(--border);
-    padding: 3px 10px;
-    border-radius: 12px;
-    white-space: nowrap;
-    align-self: center;
-    letter-spacing: 0.04em;
-  }
-
-  @media (max-width: 600px) {
-    .hero, .recent { padding-left: 20px; padding-right: 20px; }
-    .post-row { grid-template-columns: 56px 1fr; }
-    .post-tag { display: none; }
-  }
-</style>
+  <script>
+    import "../scripts/nav.ts";
+  </script>
+</Base>

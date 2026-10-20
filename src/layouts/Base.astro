@@ -1,0 +1,45 @@
+---
+import "../styles/global.css";
+import handFont from "../generated/hand.woff2?url";
+import { loadSite } from "../lib/content.mjs";
+import { withBase } from "../lib/url";
+
+interface Props {
+  title?: string;
+  noindex?: boolean;
+}
+
+const site = loadSite();
+const { title = site.meta.title, noindex = false } = Astro.props;
+const description = site.meta.description;
+// Both deployments (own server and GitHub Pages) point search engines at the
+// main domain, so the mirror isn't treated as duplicate content.
+const canonical = site.meta.url
+  ? new URL(Astro.url.pathname.replace(import.meta.env.BASE_URL, "/"), site.meta.url).href
+  : undefined;
+
+// Self-hosted, build-time subset of ZCOOL KuaiLe (see scripts/subset-font.mjs).
+const fontFace = `@font-face{font-family:"Hand";src:url("${handFont}") format("woff2");font-display:swap;}`;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {noindex && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta name="theme-color" content="#FCFBF8" />
+    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <link rel="preload" href={handFont} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={fontFace}></style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
