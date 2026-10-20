@@ -63,6 +63,8 @@ menu:
 #   rows  大行（适合项目）   cards  两列卡片（适合经历）
 #   list  紧凑列表（适合论文、奖项）   taste  摄影 + 歌单
 # nav 是导航里的名字，留空就不进导航。
+# rows 和 list 的每一项可以加 images，显示在右侧叠成一摞：最多露出三张，点击会一张张轮换。
+# 图片放进 public/images/，src 写 /images/文件名.jpg；现在用的 /images/samples/ 是示例占位图。
 sections:
   - id: product
     nav: 产品
@@ -79,6 +81,12 @@ sections:
           - { label: 意义, value: 我第一个正式上线的产品 }
         links:
           - { label: GitHub, href: "https://github.com/ZhanYiHui06/PaperPilot" }
+        images:
+          - { src: /images/samples/sample-1.svg, alt: 示例图 }
+          - { src: /images/samples/sample-2.svg, alt: 示例图 }
+          - { src: /images/samples/sample-3.svg, alt: 示例图 }
+          - { src: /images/samples/sample-4.svg, alt: 示例图 }
+          - { src: /images/samples/sample-5.svg, alt: 示例图 }
       - name: Folio · Figma 印刷级 PDF 导出插件
         role: 独立开发者
         summary: 用 Figma 做海报、画册的人越来越多，但 Figma 只能导出 RGB 的 PDF。社区里的 CMYK 插件要么收费，要么不能给页面排序，要么慢得没法用。Folio 在 Figma 里一步做完：多页拖拽排序导出，按 ICC 配置转 CMYK，自动加出血和裁切标记，导出前逐页检查分辨率、尺寸和贴边问题。开源免费。
@@ -87,6 +95,10 @@ sections:
           - { label: 现状, value: 刚上线，数据还在攒 }
         links:
           - { label: GitHub, href: "https://github.com/ZhanYiHui06/Folio" }
+        images:
+          - { src: /images/samples/sample-2.svg, alt: 示例图 }
+          - { src: /images/samples/sample-3.svg, alt: 示例图 }
+          - { src: /images/samples/sample-4.svg, alt: 示例图 }
       - name: DeepLearner 社团官网
         role: 独立开发者 · 1 个月
         summary: 给南通大学 DeepLearner 人工智能学习社搭的对外门户。资料收集、界面设计、开发上线都是我一个人做的。
@@ -94,6 +106,9 @@ sections:
           - { label: 结果, value: 累计访问 10k+ · 全校第一个社团官网 }
         links:
           - { label: 访问网站, href: "https://deeplearner.netlify.app/" }
+        images:
+          - { src: /images/samples/sample-3.svg, alt: 示例图 }
+          - { src: /images/samples/sample-1.svg, alt: 示例图 }
 
   - id: tech
     nav: 技术
@@ -106,16 +121,27 @@ sections:
         name: Spectral–Spatial Synergistic Learning and Context-Aware Edge Enhancement for Efficient Oriented Object Detection in SAR Images
         summary: SAR 雷达图像里的旋转目标检测。我负责创新点设计、实验设计与实现，以及论文撰写。
         badge: IEEE JSTARS · 中科院 2 区
+        images:
+          - { src: /images/samples/sample-4.svg, alt: 示例图 }
+          - { src: /images/samples/sample-5.svg, alt: 示例图 }
+          - { src: /images/samples/sample-2.svg, alt: 示例图 }
       - year: "2026"
         name: Two-Stage Cross-Domain Cervical Abnormality Screening with Cytopathological Image Synthesis and Knowledge Distillation
         summary: 不同医院的宫颈细胞图像差异很大，模型换个医院就不准。我们先合成中间域缩小差异，再用知识蒸馏对齐特征。我负责实验落地，并参与论文撰写。
         badge: MICCAI 2026 · Early Accept
         links:
           - { label: 项目主页, href: "https://zhanyihui06.github.io/Cross-Domain-Cell-Detection/" }
+        images:
+          - { src: /images/samples/sample-1.svg, alt: 示例图 }
+          - { src: /images/samples/sample-4.svg, alt: 示例图 }
+          - { src: /images/samples/sample-5.svg, alt: 示例图 }
+          - { src: /images/samples/sample-3.svg, alt: 示例图 }
       - year: 2025–26
         name: 另有 3 篇期刊论文
         summary: 车道线拓扑检测、多模态抑郁症识别、细胞有丝分裂检测，发表于 Sensors、Journal of Imaging 等期刊。我负责实验落地，并参与论文撰写。
         badge: 中科院 3 区
+        images:
+          - { src: /images/samples/sample-5.svg, alt: 示例图 }
 
   - id: campus
     nav: 校园

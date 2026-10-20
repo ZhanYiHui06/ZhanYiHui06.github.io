@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import HandText from "../components/HandText.astro";
 import SectionTitle from "../components/SectionTitle.astro";
+import ImageStack from "../components/ImageStack.astro";
 import { loadSite } from "../lib/content.mjs";
 import { withBase, isExternal } from "../lib/url";
 
@@ -87,20 +88,23 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
         {s.layout === "rows" && (
           <div class="projects">
             {s.items.map((p) => (
-              <article class="project">
-                <div class="project-top">
-                  <h3>{p.name}</h3>
-                  {p.role && <div class="role">{p.role}</div>}
-                </div>
-                {p.summary && <p>{p.summary}</p>}
-                {p.facts.length > 0 && (
-                  <div class="facts">
-                    {p.facts.map((f) => <span><strong>{f.label}</strong>{f.value}</span>)}
+              <article class:list={["project", { "has-stack": p.images.length > 0 }]}>
+                <div class="project-body">
+                  <div class="project-top">
+                    <h3>{p.name}</h3>
+                    {p.role && <div class="role">{p.role}</div>}
                   </div>
-                )}
-                {shown(p.links).length > 0 && (
-                  <div class="item-links">{shown(p.links).map((l) => <a {...linkAttrs(l.href)}>{l.label} ↗</a>)}</div>
-                )}
+                  {p.summary && <p>{p.summary}</p>}
+                  {p.facts.length > 0 && (
+                    <div class="facts">
+                      {p.facts.map((f) => <span><strong>{f.label}</strong>{f.value}</span>)}
+                    </div>
+                  )}
+                  {shown(p.links).length > 0 && (
+                    <div class="item-links">{shown(p.links).map((l) => <a {...linkAttrs(l.href)}>{l.label} ↗</a>)}</div>
+                  )}
+                </div>
+                <ImageStack images={p.images} label={p.name} />
               </article>
             ))}
           </div>
@@ -122,16 +126,17 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
         {s.layout === "list" && (
           <div class="research-list">
             {s.items.map((r) => (
-              <article class="research-item">
+              <article class:list={["research-item", { "has-stack": r.images.length > 0 }]}>
                 <div class="year">{r.year}</div>
-                <div>
+                <div class="research-body">
+                  {r.badge && <div class="badge">{r.badge}</div>}
                   <h3>{r.name}</h3>
                   {r.summary && <p>{r.summary}</p>}
                   {shown(r.links).length > 0 && (
                     <div class="item-links">{shown(r.links).map((l) => <a {...linkAttrs(l.href)}>{l.label} ↗</a>)}</div>
                   )}
                 </div>
-                {r.badge && <div class="badge">{r.badge}</div>}
+                <ImageStack images={r.images} label={r.name} />
               </article>
             ))}
           </div>
@@ -190,5 +195,6 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
 
   <script>
     import "../scripts/nav.ts";
+    import "../scripts/stack.ts";
   </script>
 </Base>
