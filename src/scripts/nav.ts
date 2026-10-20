@@ -1,7 +1,7 @@
 // Top bar → left rail morph (FLIP) and active-section highlighting.
-// Breakpoint must match the `min-width: 1280px` block in global.css.
+// Breakpoint must match the `min-width: 1360px` block in global.css.
 
-const SIDE_MQ = window.matchMedia("(min-width: 1280px)");
+const SIDE_MQ = window.matchMedia("(min-width: 1360px)");
 const REDUCE_MQ = window.matchMedia("(prefers-reduced-motion: reduce)");
 const COMPACT_AFTER = 96; // px scrolled before the nav turns into the rail
 const FLY_MS = 680;

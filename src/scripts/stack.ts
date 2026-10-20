@@ -9,7 +9,6 @@ for (const stack of document.querySelectorAll<HTMLButtonElement>("[data-stack]")
   const cards = Array.from(stack.querySelectorAll<HTMLElement>(".stack-card"));
   if (cards.length < 2) continue;
 
-  const counter = stack.parentElement?.querySelector<HTMLElement>("[data-stack-index]");
   const baseLabel = stack.getAttribute("aria-label")?.replace(/，第 \d+ 张.*$/, "") ?? "";
   let order = cards.map((_, i) => i); // order[0] is the card on top
   let busy = false;
@@ -19,7 +18,6 @@ for (const stack of document.querySelectorAll<HTMLButtonElement>("[data-stack]")
       cards[cardIndex].dataset.depth = String(Math.min(depth, 3));
     });
     const front = order[0] + 1;
-    if (counter) counter.textContent = String(front);
     stack.setAttribute("aria-label", `${baseLabel}，第 ${front} 张，共 ${cards.length} 张，点击换下一张`);
   };
 

@@ -1,9 +1,10 @@
 /* 喜茶留白 · 手写拙趣
    Breakpoints (keep in sync with src/scripts/nav.ts):
    - ≤ 980px   narrow top bar, single-column sections
-   - ≥ 1280px  nav morphs into a left rail once you scroll. Below 1280 there is
-               not enough margin left of the content for the 156px rail, which
-               is why the old page's rail covered the text at 981–1243px. */
+   - ≥ 1360px  nav morphs into a left rail once you scroll. Narrower than that
+               there is not enough margin left of the 900px content for the
+               156px rail plus its 64px gap (the old page's rail covered the
+               text at 981–1243px for this reason). */
 
 :root {
   --bg: #FCFBF8;
@@ -22,7 +23,7 @@
 
 @media (min-width: 900px) {
   :root {
-    --content: 780px;
+    --content: 900px;
     --gutter: 48px;
   }
 }
@@ -38,7 +39,7 @@ html {
   scroll-padding-top: calc(var(--nav-h) + 24px);
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1360px) {
   /* anchor jumps land below the fold line, where the nav is already a rail */
   html { scroll-padding-top: 40px; }
 }
@@ -216,7 +217,7 @@ a:focus-visible {
   .top-nav a.is-active::after { bottom: -4px; }
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1360px) {
   .site-nav {
     transition:
       top 0.65s var(--ease-morph),
@@ -783,12 +784,6 @@ a:focus-visible {
 
 .stack-card.is-tucking { z-index: 0 !important; }
 
-.stack-count {
-  font-size: 12px;
-  color: var(--muted);
-  letter-spacing: 0.08em;
-  font-variant-numeric: tabular-nums;
-}
 
 @media (prefers-reduced-motion: reduce) {
   .stack-card { transition: opacity 0.2s ease; }
