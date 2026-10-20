@@ -99,7 +99,7 @@ a:focus-visible {
 
 /* ——— handwritten display ——— */
 .hand {
-  font-family: "Hand", "ZCOOL KuaiLe", "LXGW WenKai", "霞鹜文楷", "Kaiti SC", "STKaiti", "KaiTi", serif;
+  font-family: "Hand", "Xiaolai SC", "LXGW WenKai", "霞鹜文楷", "Kaiti SC", "STKaiti", "KaiTi", serif;
   font-weight: 400;
   letter-spacing: 0.06em;
   line-height: 1.3;
@@ -366,8 +366,149 @@ a:focus-visible {
   vertical-align: 2px;
 }
 
+/* ——— menu: a hand-drawn 喜茶-style drinks card ——— */
+.menu {
+  position: relative;
+  margin-top: 64px;
+  padding: 36px 40px 30px;
+}
+
+.menu-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.menu-frame path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.menu-head {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.menu-head h2 {
+  margin: 0;
+  font-size: clamp(28px, 4.5vw, 34px);
+}
+
+.menu-head .en,
+.menu-tag {
+  font-size: 12px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.menu-list {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.menu-list li + li { border-top: 1px dashed var(--line); }
+
+.menu-item {
+  display: grid;
+  gap: 4px;
+  padding: 16px 0;
+}
+
+.menu-line {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  min-width: 0;
+}
+
+.menu-name {
+  font-size: 22px;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.menu-tag {
+  letter-spacing: 0.08em;
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 999px;
+  padding: 1px 9px;
+  white-space: nowrap;
+}
+
+.menu-dots {
+  flex: 1;
+  min-width: 24px;
+  border-bottom: 1.5px dotted var(--line);
+  transform: translateY(-4px);
+}
+
+.menu-go {
+  color: var(--muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.menu-item:hover .menu-go,
+.menu-item:focus-visible .menu-go {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+.menu-desc {
+  color: var(--body-ink);
+  font-size: 14px;
+}
+
+.menu-ing {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.menu-ing-label {
+  margin-right: 8px;
+  color: var(--pink-dot);
+}
+
+.menu-foot {
+  position: relative;
+  margin: 14px 0 0;
+  text-align: right;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
 /* ——— section ——— */
 .section { margin-top: 120px; }
+
+.item-links {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-size: 13px;
+}
+
+.item-links a {
+  color: var(--accent);
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+
+.item-links a:hover { color: var(--ink); }
 
 .section-head { margin-bottom: 48px; }
 
@@ -462,6 +603,9 @@ a:focus-visible {
   gap: 48px 40px;
 }
 
+/* an odd last card takes the full row instead of sitting alone in one column */
+.collab:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
 .collab h3 {
   margin: 0 0 8px;
   font-size: 18px;
@@ -538,6 +682,86 @@ a:focus-visible {
   font-size: 12px;
   color: var(--accent);
   white-space: nowrap;
+}
+
+/* research titles are full English paper titles; let them break anywhere */
+.research-item > div { min-width: 0; }
+.research-item h3 { overflow-wrap: anywhere; }
+
+/* ——— taste: photos + playlist ——— */
+.taste {
+  display: grid;
+  gap: 56px;
+}
+
+.photos {
+  columns: 3 200px;
+  column-gap: 16px;
+}
+
+.photo {
+  margin: 0 0 16px;
+  break-inside: avoid;
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.photo figcaption {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.tracks {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: track;
+}
+
+.track {
+  counter-increment: track;
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 2px 12px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+
+.track:last-child { border-bottom: 1px solid var(--line); }
+
+.track::before {
+  content: counter(track, decimal-leading-zero);
+  grid-row: span 2;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  padding-top: 3px;
+}
+
+.track-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  align-items: baseline;
+  font-weight: 600;
+}
+
+.track-artist {
+  font-weight: 400;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.track-note {
+  grid-column: 2;
+  font-size: 14px;
+  color: var(--muted);
 }
 
 /* ——— soft note strip ——— */
@@ -623,6 +847,11 @@ a:focus-visible {
   }
 
   .research-item .badge { order: -1; }
+
+  .menu { padding: 28px 22px 22px; }
+  .menu-line { flex-wrap: wrap; gap: 6px 10px; }
+  .menu-dots { display: none; }
+  .menu-go { margin-left: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {

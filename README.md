@@ -27,7 +27,7 @@ src/pages/index.astro     页面结构
 src/styles/global.css     样式
 src/scripts/nav.ts        导航「顶栏 → 左侧手绘框」变形动画
 scripts/subset-font.mjs   构建前把手写字体裁剪成只含用到的字（约 10 KB）
-fonts-src/                站酷快乐体原始字体（SIL OFL 授权，可商用）
+fonts-src/                小赖字体 GB2312 常用字子集（SIL OFL 授权，可商用）
 deploy/                   服务器配置样例（Caddy / nginx）
 .github/workflows/        自动部署
 ```
