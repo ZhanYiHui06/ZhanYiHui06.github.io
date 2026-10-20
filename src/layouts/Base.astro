@@ -18,7 +18,7 @@ const canonical = site.meta.url
   ? new URL(Astro.url.pathname.replace(import.meta.env.BASE_URL, "/"), site.meta.url).href
   : undefined;
 
-// Self-hosted, build-time subset of ZCOOL KuaiLe (see scripts/subset-font.mjs).
+// Self-hosted, build-time subset of Xiaolai SC 小赖字体 (see scripts/subset-font.mjs).
 const fontFace = `@font-face{font-family:"Hand";src:url("${handFont}") format("woff2");font-display:swap;}`;
 ---
 <!doctype html>

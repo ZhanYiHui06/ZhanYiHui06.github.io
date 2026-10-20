@@ -1,4 +1,4 @@
-Copyright 2018 The ZCOOL KuaiLe Project Authors (https://github.com/googlefonts/zcool-kuaile)
+Copyright © 2020 LXGW (Xiaolai SC, https://github.com/lxgw/kose-font), derived from SetoFont by ma_shimo.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 This license is copied below, and is also available with a FAQ at:

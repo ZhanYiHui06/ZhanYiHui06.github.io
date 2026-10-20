@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import subsetFont from "subset-font";
 import { loadSite, handTexts } from "../src/lib/content.mjs";
 
-const SOURCE = new URL("../fonts-src/ZCOOLKuaiLe-Regular.ttf", import.meta.url);
+const SOURCE = new URL("../fonts-src/XiaolaiSC-Regular.gb2312.woff2", import.meta.url);
 const OUT_DIR = new URL("../src/generated/", import.meta.url);
 
 const ascii = Array.from({ length: 95 }, (_, i) => String.fromCharCode(32 + i)).join("");
