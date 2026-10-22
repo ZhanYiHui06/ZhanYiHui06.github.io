@@ -45,7 +45,7 @@ deploy/                   服务器配置样例（Caddy / nginx）
    ```bash
    # 在服务器上
    sudo mkdir -p /var/www/personal-page && sudo chown $USER /var/www/personal-page
-   # 装 Caddy（自动 HTTPS），把 deploy/Caddyfile 里的 example.com 换成你的域名
+   # 装 Caddy（自动 HTTPS），把 deploy/Caddyfile 里的 ruofu.site 换成你的域名
    sudo cp Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
    ```
    在本机生成一对部署专用密钥：`ssh-keygen -t ed25519 -f deploy_key -N ""`，
