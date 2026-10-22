@@ -208,6 +208,8 @@ contact:
       - { month: 2027-08, status: 有空 }
       - { month: 2027-09, status: 有空 }
       - { month: 2027-10, status: 有空 }
+      - { month: 2027-11, status: 有空 }
+      - { month: 2027-12, status: 有空 }
     # 气泡里的话，想改再取消注释
     # says:
     #   free: 确认有空！😄
