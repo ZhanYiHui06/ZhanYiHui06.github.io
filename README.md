@@ -23,8 +23,9 @@ Astro 静态站。所有文字内容都在 **一个文件** 里：[`src/content/
 构建时每张照片会自动生成 480–2400px 多档 AVIF / WebP、一张模糊预览和主色调，全部自托管。
 横图、竖图、方图会自动排成错落版式，调换顺序就能得到不同的节奏。
 
-交互：滚动时照片逐张展开，成对的照片以不同速度漂移；点开后照片从原位置弹簧式放大，
-左右键 / 左右滑切换，下拉或 Esc 关闭，地址 `#p3` 可直接分享第 3 张。系统开启「减弱动态效果」时只保留淡入淡出。
+交互：整屏是一面无限平铺的照片墙，拖动、滚轮、触控板或方向键都能朝任意方向移动，松手后带惯性滑停，每列速度略有不同，
+照片会彼此错动。点开任意一张进入全屏浏览：照片从墙上原位放大，背景是这张照片的模糊色调；左右滑、滚轮、方向键或底部缩略图切换，
+新照片从侧面擦入；下拉、Esc 或点空白处放回墙上。地址 `#p3` 可直接打开第 3 张。系统开启「减弱动态效果」时只保留淡入淡出。
 
 **本地预览（可选）：** 需要 Node 22+。
 
@@ -40,7 +41,7 @@ npm run build    # 产物在 dist/
 src/content/site.yaml     ← 主页内容（你只需要改这里）
 src/content/gallery.yaml  ← 画廊内容；照片原图放 src/assets/gallery/
 src/pages/index.astro     页面结构
-src/pages/gallery.astro   画廊页（样式 src/styles/gallery.css，交互 src/scripts/gallery/）
+src/pages/gallery.astro   画廊页（样式 src/styles/gallery.css，照片墙和全屏浏览在 src/scripts/gallery/）
 src/styles/global.css     样式
 src/scripts/nav.ts        导航「顶栏 → 左侧手绘框」变形动画
 scripts/subset-font.mjs   构建前把手写字体裁剪成只含用到的字（约 10 KB）

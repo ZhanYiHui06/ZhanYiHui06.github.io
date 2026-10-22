@@ -1,15 +1,17 @@
-// A soft follower for mouse users: a dot that trails the pointer on a spring
-// and opens into a "View" disc over photos. Touch and reduced-motion users
-// keep the normal cursor.
+// A soft follower for mouse users: a dot that trails the pointer on a spring,
+// reading "Drag" over the wall and opening into a "View" disc over a photo.
+// Touch and reduced-motion users keep the normal cursor.
 import { reduceMotion, type SpringParams } from "./spring";
 import { stepSpring } from "../../lib/spring.mjs";
 
 const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
 const el = document.querySelector<HTMLElement>(".g-cursor")!;
+const label = el.querySelector<HTMLElement>(".g-cursor-label")!;
 const FOLLOW: SpringParams = { stiffness: 520, damping: 44 };
 
 if (fine.matches && !reduceMotion.matches) {
-  document.documentElement.classList.add("has-cursor");
+  const root = document.documentElement;
+  root.classList.add("has-cursor");
   el.classList.add("is-hidden");
 
   let x = -100, y = -100, vx = 0, vy = 0, tx = -100, ty = -100;
@@ -36,11 +38,15 @@ if (fine.matches && !reduceMotion.matches) {
     tx = e.clientX;
     ty = e.clientY;
     if (el.classList.contains("is-hidden")) {
-      // first sight: appear where the pointer is rather than flying in
       x = tx; y = ty; vx = vy = 0;
       el.classList.remove("is-hidden");
     }
-    el.classList.toggle("is-view", !!(e.target as Element).closest?.(".g-frame"));
+    const target = e.target as Element;
+    const onPhoto = !!target.closest?.(".w-item");
+    const onWall = !!target.closest?.(".wall");
+    el.classList.toggle("is-view", onPhoto && !root.classList.contains("is-dragging"));
+    el.classList.toggle("is-wall", onWall);
+    label.textContent = onPhoto ? "View" : "Drag";
     if (!running) {
       running = true;
       last = performance.now();
@@ -50,6 +56,4 @@ if (fine.matches && !reduceMotion.matches) {
 
   document.documentElement.addEventListener("pointerleave", () => el.classList.add("is-hidden"));
   window.addEventListener("blur", () => el.classList.add("is-hidden"));
-  // the viewer covers the page; forget whatever photo was under the pointer
-  document.querySelector(".lb")!.addEventListener("click", () => el.classList.remove("is-view"));
 }
