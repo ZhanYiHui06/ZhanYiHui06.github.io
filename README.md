@@ -11,6 +11,21 @@ Astro 静态站。所有文字内容都在 **一个文件** 里：[`src/content/
 - 链接的 `href` 留空就不显示，不会再出现点了没反应的假链接。
 - yaml 写错（比如漏了必填项）时构建会失败并提示是哪一行，线上旧版本不受影响。
 
+## 摄影画廊（/gallery）
+
+独立页面，暗房风格，不加载主页的手绘样式。内容在 [`src/content/gallery.yaml`](src/content/gallery.yaml)。
+
+换照片：
+1. 把原图放进 `src/assets/gallery/`（相机或手机导出的原图即可，不用自己压缩）。
+2. 在 `gallery.yaml` 的 `photos` 里按顺序写上文件名，标题、地点、时间、器材都可选。
+3. 全部换成自己的照片后，把 `draft` 改成 `false`（之后搜索引擎才会收录，页脚的「示例照片」说明也会消失），再删掉不用的示例图。
+
+构建时每张照片会自动生成 480–2400px 多档 AVIF / WebP、一张模糊预览和主色调，全部自托管。
+横图、竖图、方图会自动排成错落版式，调换顺序就能得到不同的节奏。
+
+交互：滚动时照片逐张展开，成对的照片以不同速度漂移；点开后照片从原位置弹簧式放大，
+左右键 / 左右滑切换，下拉或 Esc 关闭，地址 `#p3` 可直接分享第 3 张。系统开启「减弱动态效果」时只保留淡入淡出。
+
 **本地预览（可选）：** 需要 Node 22+。
 
 ```bash
@@ -22,8 +37,10 @@ npm run build    # 产物在 dist/
 ## 目录
 
 ```
-src/content/site.yaml     ← 内容（你只需要改这里）
+src/content/site.yaml     ← 主页内容（你只需要改这里）
+src/content/gallery.yaml  ← 画廊内容；照片原图放 src/assets/gallery/
 src/pages/index.astro     页面结构
+src/pages/gallery.astro   画廊页（样式 src/styles/gallery.css，交互 src/scripts/gallery/）
 src/styles/global.css     样式
 src/scripts/nav.ts        导航「顶栏 → 左侧手绘框」变形动画
 scripts/subset-font.mjs   构建前把手写字体裁剪成只含用到的字（约 10 KB）

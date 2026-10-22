@@ -1,0 +1,110 @@
+# 摄影画廊（/gallery）的全部内容。
+#
+# 换照片只需要两步：
+#   1. 把原图放进 src/assets/gallery/（jpg / png / webp 都行，直接放相机或手机导出的原图，
+#      构建时会自动压缩成多种尺寸的 AVIF 和 WebP，不用自己处理）
+#   2. 在下面 photos 里按想要的顺序列出来，file 写文件名
+# 横图、竖图、方图会自动排成错落的版式；顺序决定版式，可以多试几种排列。
+
+meta:
+  title: 摄影
+  description: 詹毅辉拍的照片。
+
+# 现在是示例照片：不让搜索引擎收录，并在页脚注明。换成自己的照片后改成 false。
+draft: true
+
+title: 留住的光
+en: Light, kept.
+intro: 走路时停下来的那几秒。
+
+photos:
+  # file 必填；其余都可以省略
+  #   title  作品名        place  地点        date  时间（随便写，如 2025 秋）
+  #   camera 器材/参数，如 "X100V · f/2 · 1/500s"
+  #   alt    给读屏软件的画面描述（没写就用 title）
+  #   credit / source  图片作者和出处（用别人的图时写，自己拍的不用）
+  # 下面是 Wikimedia Commons 上的 CC0 示例照片，换成自己的之后连同 src/assets/gallery/ 里的文件一起删掉
+  - file: 01-jetty-fog.jpg
+    title: 雾中栈桥
+    place: 瑞典 Holländaröd
+    date: "2018"
+    alt: 雾里伸进水面的木栈桥，远处什么也看不见
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Jetty_in_fog_at_Holländaröd_1.jpg"
+  - file: 02-barn-window.jpg
+    title: 谷仓的窗
+    place: 瑞典 Färlev
+    date: "2018"
+    alt: 红色木板谷仓墙上一扇旧白框窗
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Window_on_a_barn_in_Färlev.jpg"
+  - file: 03-boathouse-moon.jpg
+    title: 月光下的船屋
+    place: 瑞典 Holma
+    date: "2017"
+    alt: 夜里月光照着水边的红色船屋
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Holma_Boat_Club_by_the_light_of_the_moon.jpg"
+  - file: 04-stained-glass.jpg
+    title: 彩窗投下的光
+    place: 哥本哈根 大理石教堂
+    date: "2016"
+    alt: 彩色玻璃窗的蓝光投在教堂墙上的十字形光斑
+    credit: Jebulon · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Light_through_a_stained_glass_window,_cross,_wall_of_the_Marmor_(Frederiks)_Kirke_Copenhagen_Denmark.jpg"
+  - file: 05-morning-mist.jpg
+    title: 晨雾
+    place: 瑞典西海岸
+    date: "2018"
+    alt: 刚翻过的田地上，晨雾贴着地面散开
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Morning_mist_lifting_from_plowed_field_3.jpg"
+  - file: 06-snow-tracks.jpg
+    title: 钠灯下的雪
+    place: 瑞典
+    date: "2017"
+    alt: 橙色路灯下，雪地上交错的车辙
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Car_tire_tracks_in_snow_under_sodium_light.jpg"
+  - file: 07-thunder-cloud.jpg
+    title: 雷雨云
+    place: 瑞典 Gåseberg
+    date: "2017"
+    alt: 低矮房屋上方翻涌的灰色雷雨云
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Thunder_cloud_over_Gåseberg.jpg"
+  - file: 08-station-lights.jpg
+    title: 车站穹顶
+    place: 布拉格中央车站
+    date: "2025"
+    alt: 车站天花板上成排的红色圆形灯罩
+    credit: AVDLCZ · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Prague_Main_Railway_Station_Ceiling_Lights.jpg"
+  - file: 09-oakmoss.jpg
+    title: 枝上的地衣
+    place: 瑞典 Myrstigen
+    date: "2020"
+    alt: 细枝上挂着一簇灰绿色的地衣
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Oakmoss_at_Myrstigen_3.jpg"
+  - file: 10-half-moon.jpg
+    title: 上弦月
+    place: 瑞典 Brofjorden
+    date: "2019"
+    alt: 蓝调时分的峡湾，半月倒映在水面
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Waxing_half_moon_over_Brofjorden_1.jpg"
+  - file: 11-rain-marina.jpg
+    title: 雨落码头
+    place: 瑞典 Holma
+    date: "2018"
+    alt: 灰色雨幕里停满小船的码头
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Rain_over_Holma_marina.jpg"
+  - file: 12-last-light.jpg
+    title: 最后一缕光
+    place: 瑞典
+    date: "2019"
+    alt: 黄昏时带梯子的栈桥倒映在平静的水里
+    credit: W.carter · CC0 · Wikimedia Commons
+    source: "https://commons.wikimedia.org/wiki/File:Jetty_with_the_ladders_in_last_light_of_the_day.jpg"

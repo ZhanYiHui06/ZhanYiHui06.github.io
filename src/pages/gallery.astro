@@ -1,0 +1,195 @@
+---
+// The photo gallery. Deliberately its own world: none of the homepage's
+// hand-drawn styling is loaded here (no Base layout, no global.css).
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource/instrument-serif/400-italic.css";
+import serifItalic from "@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url";
+import "../styles/gallery.css";
+import { loadGallery, layoutRows } from "../lib/gallery";
+import { loadSite } from "../lib/content.mjs";
+import { springEasing } from "../lib/spring.mjs";
+import { withBase } from "../lib/url";
+
+const site = loadSite();
+const gallery = await loadGallery();
+const { photos } = gallery;
+const rows = layoutRows(photos);
+
+const pad = (n: number) => String(n).padStart(2, "0");
+const total = pad(photos.length);
+const caption = (p: (typeof photos)[number]) => [p.place, p.date].filter(Boolean).join(" · ");
+const credits = photos.filter((p) => p.credit);
+
+const title = `${gallery.meta.title} · ${site.name}`;
+const canonical = site.meta.url ? new URL("/gallery", site.meta.url).href : undefined;
+
+// Spring curves baked into CSS linear() easings; browsers without linear()
+// keep the cubic-bezier fallbacks in gallery.css.
+const springs = {
+  reveal: springEasing({ stiffness: 36, damping: 12 }),
+  settle: springEasing({ stiffness: 120, damping: 20 }),
+  pop: springEasing({ stiffness: 200, damping: 18 }),
+};
+const springCss = `@supports (transition-timing-function: linear(0, 1)) { :root {${Object.entries(springs)
+  .map(([name, s]) => `--ease-${name}: ${s.easing}; --dur-${name}: ${s.duration}ms;`)
+  .join(" ")}} }`;
+
+// Lightbox data, read by src/scripts/gallery/lightbox.ts
+const lightboxData = photos.map((p) => ({
+  title: p.title,
+  caption: caption(p),
+  camera: p.camera,
+  alt: p.alt || p.title,
+  width: p.width,
+  height: p.height,
+  avif: p.avif,
+  webp: p.webp,
+  color: p.color,
+}));
+
+// The intro title rises in word by word
+const words = (s: string) => s.split(/(\s+)/).filter(Boolean);
+---
+<!doctype html>
+<html lang="zh-CN" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    {gallery.meta.description && <meta name="description" content={gallery.meta.description} />}
+    {gallery.draft && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    {gallery.meta.description && <meta property="og:description" content={gallery.meta.description} />}
+    <meta name="theme-color" content="#0e0d0c" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <link rel="preload" href={serifItalic} as="font" type="font/woff2" crossorigin />
+    <script is:inline>document.documentElement.classList.replace("no-js", "js");</script>
+    <style is:inline set:html={springCss}></style>
+  </head>
+  <body class="g">
+    <a class="g-skip" href="#frames">跳到照片</a>
+
+    <header class="g-bar">
+      <a class="g-home" href={withBase("/")}>
+        <span class="g-arrow" aria-hidden="true">←</span>
+        <span>{site.name}</span>
+      </a>
+      <span class="g-bar-count" aria-hidden="true"><em>{total}</em> frames</span>
+    </header>
+
+    <main>
+      <section class="g-intro" aria-labelledby="g-title">
+        <p class="g-kicker">Photographs · {site.name}</p>
+        <h1 id="g-title" class="g-title">
+          {gallery.en ? (
+            <span class="g-title-en" lang="en">
+              {words(gallery.en).map((w, i) =>
+                /^\s+$/.test(w) ? w : <span class="g-word"><span style={`--i:${i}`}>{w}</span></span>
+              )}
+            </span>
+          ) : null}
+          <span class={gallery.en ? "g-title-zh" : "g-title-en"}>{gallery.title}</span>
+        </h1>
+        {gallery.intro && <p class="g-lead">{gallery.intro}</p>}
+        <p class="g-hint" aria-hidden="true"><span class="g-hint-line"></span>向下滚动 · 点开任意一张</p>
+      </section>
+
+      <section class="g-frames" id="frames" aria-label="照片" tabindex="-1">
+        {rows.map((row) => (
+          <div class="g-row">
+            {row.map(({ photo: p, start, span, lift, speed }) => (
+              <figure
+                class:list={["g-photo", `is-${p.shape}`, { "is-lift": lift, "is-right": p.index % 2 === 0 }]}
+                style={`--start:${start};--span:${span};--speed:${speed};--ratio:${p.width}/${p.height};--tone:${p.color}`}
+                data-index={p.index - 1}
+              >
+                <a class="g-frame" href={p.fallback} aria-label={`查看大图：${p.title || p.alt || `第 ${p.index} 张`}`}>
+                  <span class="g-blur" style={`background-image:url(${p.blur})`} aria-hidden="true"></span>
+                  <picture>
+                    <source type="image/avif" srcset={p.avif} sizes={`(min-width: 900px) ${Math.round((span / 12) * 100)}vw, 92vw`} />
+                    <img
+                      src={p.fallback}
+                      srcset={p.webp}
+                      sizes={`(min-width: 900px) ${Math.round((span / 12) * 100)}vw, 92vw`}
+                      width={p.width}
+                      height={p.height}
+                      alt={p.alt || p.title}
+                      loading={p.index <= 2 ? "eager" : "lazy"}
+                      decoding="async"
+                      fetchpriority={p.index === 1 ? "high" : undefined}
+                    />
+                  </picture>
+                </a>
+                <figcaption class="g-cap">
+                  <span class="g-num">{pad(p.index)}</span>
+                  <span class="g-cap-body">
+                    {p.title && <span class="g-cap-title">{p.title}</span>}
+                    {caption(p) && <span class="g-cap-meta">{caption(p)}</span>}
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        ))}
+      </section>
+
+      <footer class="g-foot">
+        <p class="g-end" lang="en">Fin.</p>
+        <a class="g-back" href={withBase("/")}><span aria-hidden="true">←</span> 回到主页</a>
+        {gallery.draft && <p class="g-draft">这里暂时是示例照片，真实作品稍后替换。</p>}
+        {credits.length > 0 && (
+          <details class="g-credits">
+            <summary>图片来源</summary>
+            <ol>
+              {credits.map((p) => (
+                <li>
+                  <span class="g-num">{pad(p.index)}</span>
+                  {p.source ? <a href={p.source} target="_blank" rel="noopener">{p.credit}</a> : p.credit}
+                </li>
+              ))}
+            </ol>
+          </details>
+        )}
+      </footer>
+    </main>
+
+    <div class="g-progress" aria-hidden="true">
+      <span class="g-progress-num"><em data-current>01</em> / {total}</span>
+      <span class="g-progress-track"><span class="g-progress-fill"></span></span>
+    </div>
+
+    <div class="g-cursor" aria-hidden="true"><span class="g-cursor-dot"><span>View</span></span></div>
+
+    <div class="lb" role="dialog" aria-modal="true" aria-label="大图浏览" hidden>
+      <div class="lb-backdrop"></div>
+      <div class="lb-stage">
+        <div class="lb-frame">
+          <img class="lb-low" alt="" />
+          <img class="lb-hi" alt="" />
+        </div>
+      </div>
+      <button class="lb-nav lb-prev" type="button" aria-label="上一张"><span aria-hidden="true">←</span></button>
+      <button class="lb-nav lb-next" type="button" aria-label="下一张"><span aria-hidden="true">→</span></button>
+      <div class="lb-top">
+        <span class="lb-count"><em data-lb-index>01</em> / {total}</span>
+        <button class="lb-close" type="button" aria-label="关闭">关闭 <span aria-hidden="true">✕</span></button>
+      </div>
+      <div class="lb-cap" aria-live="polite">
+        <span class="lb-title"></span>
+        <span class="lb-meta"></span>
+        <span class="lb-camera"></span>
+      </div>
+    </div>
+
+    <script type="application/json" id="lb-data" set:html={JSON.stringify(lightboxData).replace(/</g, "\\u003c")}></script>
+  </body>
+</html>
+
+<script>
+  import "../scripts/gallery/scroll";
+  import "../scripts/gallery/cursor";
+  import "../scripts/gallery/lightbox";
+</script>
