@@ -65,7 +65,7 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
                   <span class="menu-name hand"><HandText text={m.name} /></span>
                   {m.tag && <span class="menu-tag">{m.tag}</span>}
                   <span class="menu-dots" aria-hidden="true"></span>
-                  <span class="menu-go" aria-hidden="true">→</span>
+                  {m.price && <span class="menu-price hand"><HandText text={m.price} /></span>}
                 </span>
                 {m.desc && <span class="menu-desc">{m.desc}</span>}
                 {m.ingredients && <span class="menu-ing"><span class="menu-ing-label">配料</span>{m.ingredients}</span>}

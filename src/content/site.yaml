@@ -32,25 +32,30 @@ hero:
     - 南通大学 · 计算机科学与技术 2024 级
     - 2027.01 起可实习 · 上海 / 杭州 / 远程
 
-# 首屏下面那张「今日菜单」，每一项点进去是对应的板块（target 填板块的 id）
+# 首屏下面那张「今日菜单」：给只看十秒的人的摘要，不是第二份导航。
+# price 是右边手写的「价格」，放一个最硬的数字；desc 别再重复这个数字。
+# 每一项仍可点进对应板块（target 填板块的 id）
 menu:
   title: 今日菜单 # hand，name 也是手写体
   en: Menu
   items:
     - name: 产品感
       tag: 招牌
+      price: 3 款上线
       ingredients: 产品定义 · 交互与视觉 · 开发上线 · 宣发
-      desc: 三个从想法到上线都由我一个人完成的产品。
+      desc: 从想法、设计、开发到上线宣发，全程一个人做完。
       target: product
     - name: 技术底子
       tag: 硬核
+      price: 5 篇论文
       ingredients: 计算机科班 · 计算机视觉 · 论文发表
-      desc: 5 篇论文，从实验到写作都亲手做过。
+      desc: IEEE JSTARS、MICCAI 2026，实验和写作都亲手做。
       target: tech
     - name: 把事办成
       tag: 人气
+      price: 20+ 场活动
       ingredients: 活动策划 · 社群运营 · 企业建联
-      desc: 两家大厂的校园大使，20+ 场校级活动。
+      desc: 字节 TRAE、美团 Tabbit 两家大厂的校园大使。
       target: campus
     - name: 一点私心
       tag: 季节限定

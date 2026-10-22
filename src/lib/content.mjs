@@ -92,6 +92,7 @@ const schema = z.object({
           z.object({
             name: text,
             tag: optionalText,
+            price: optionalText,
             ingredients: optionalText,
             desc: optionalText,
             target: text,
@@ -151,7 +152,7 @@ export function handTexts(site) {
     site.note.title,
     site.contact.title,
     ...site.sections.map((s) => s.title),
-    ...(site.menu ? [site.menu.title, ...site.menu.items.map((m) => m.name)] : []),
+    ...(site.menu ? [site.menu.title, ...site.menu.items.flatMap((m) => [m.name, m.price])] : []),
     "404找不到这一页回首页", // src/pages/404.astro
   ];
 }
