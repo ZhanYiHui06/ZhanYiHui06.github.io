@@ -194,18 +194,19 @@ contact:
   # 档期格子：一格一个月，按时间顺序写。status 填 有空 / 待定 / 没空（或 free / maybe / busy）。
   # 已经过去的月份页面上会自动隐藏，记得往后补新的月份。删掉整个 freetime 就不显示这块。
   freetime:
-    months: # ⚠️ 下面是占位，等你给真实安排
+    months:
+      - { month: 2026-10, status: 没空 }
       - { month: 2026-11, status: 没空 }
-      - { month: 2026-12, status: 待定 }
+      - { month: 2026-12, status: 没空 }
       - { month: 2027-01, status: 有空 }
       - { month: 2027-02, status: 有空 }
-      - { month: 2027-03, status: 有空 }
-      - { month: 2027-04, status: 有空 }
+      - { month: 2027-03, status: 待定 }
+      - { month: 2027-04, status: 待定 }
       - { month: 2027-05, status: 待定 }
-      - { month: 2027-06, status: 没空 }
+      - { month: 2027-06, status: 待定 }
       - { month: 2027-07, status: 有空 }
       - { month: 2027-08, status: 有空 }
-      - { month: 2027-09, status: 待定 }
+      - { month: 2027-09, status: 有空 }
       - { month: 2027-10, status: 有空 }
     # 气泡里的话，想改再取消注释
     # says:

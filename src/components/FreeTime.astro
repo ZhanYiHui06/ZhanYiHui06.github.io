@@ -72,7 +72,7 @@ const used = (["free", "maybe", "busy"] as Status[]).filter((st) => months.some(
   <div class="freetime" data-freetime>
     {title && <h3 class="freetime-title hand"><HandText text={title} /></h3>}
     {note && <p class="freetime-note">{note}</p>}
-    <ol class="freetime-row">
+    <ol class="freetime-row" style={`--n:${cells.length};--n-half:${Math.ceil(cells.length / 2)}`}>
       {cells.map((c) => (
         <li class="ft-cell" data-month={c.key} style={`--tilt:${c.tilt}deg`}>
           <button type="button" class={`ft-box is-${c.status}`} aria-describedby={`ft-${c.key}`}>
@@ -119,9 +119,10 @@ const used = (["free", "maybe", "busy"] as Status[]).filter((st) => months.some(
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
+    /* one row however many months are listed; --n is set on the element */
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
     gap: 6px;
-    max-width: 760px;
+    max-width: min(100%, calc(var(--n) * 64px));
   }
 
   .ft-cell {
@@ -171,7 +172,8 @@ const used = (["free", "maybe", "busy"] as Status[]).filter((st) => months.some(
   .ft-bubble {
     position: absolute;
     bottom: calc(100% + 2px);
-    left: 50%;
+    /* freetime.ts sets --shift so bubbles at the edges stay on screen */
+    left: calc(50% + var(--shift, 0px));
     z-index: 5;
     padding: 7px 12px;
     background: var(--bg);
@@ -192,7 +194,7 @@ const used = (["free", "maybe", "busy"] as Status[]).filter((st) => months.some(
     content: "";
     position: absolute;
     top: 100%;
-    left: var(--tail, 50%);
+    left: calc(50% - var(--shift, 0px));
     width: 9px;
     height: 9px;
     margin: -4px 0 0 -5px;
@@ -202,23 +204,13 @@ const used = (["free", "maybe", "busy"] as Status[]).filter((st) => months.some(
     transform: rotate(40deg) skewX(8deg);
   }
 
-  /* keep edge bubbles on screen: anchor them to the cell's outer side */
-  .ft-cell:nth-child(-n+2) .ft-bubble { left: 0; transform: translate(0, 6px); --tail: 18px; }
-  .ft-cell:nth-last-child(-n+2) .ft-bubble { left: auto; right: 0; transform: translate(0, 6px); --tail: calc(100% - 18px); }
-
   @media (hover: hover) {
     .ft-cell:hover .ft-box { transform: rotate(var(--tilt)) translateY(-2px); }
     .ft-cell:hover .ft-bubble { opacity: 1; transform: translate(-50%, 0); }
-    .ft-cell:nth-child(-n+2):hover .ft-bubble,
-    .ft-cell:nth-last-child(-n+2):hover .ft-bubble { transform: translate(0, 0); }
   }
 
   .ft-cell:has(.ft-box:focus-visible) .ft-bubble,
   .ft-cell.is-open .ft-bubble { opacity: 1; transform: translate(-50%, 0); }
-  .ft-cell:nth-child(-n+2):has(.ft-box:focus-visible) .ft-bubble,
-  .ft-cell:nth-last-child(-n+2):has(.ft-box:focus-visible) .ft-bubble,
-  .ft-cell:nth-child(-n+2).is-open .ft-bubble,
-  .ft-cell:nth-last-child(-n+2).is-open .ft-bubble { transform: translate(0, 0); }
 
   .freetime-legend {
     list-style: none;
@@ -244,13 +236,9 @@ const used = (["free", "maybe", "busy"] as Status[]).filter((st) => months.some(
   .ft-dot.is-busy { background: var(--ft-busy); }
   .ft-dot.is-maybe { background: var(--ft-maybe); }
 
-  /* phones: two rows of six so the labels stay readable */
+  /* phones: split into two rows so the labels stay readable */
   @media (max-width: 560px) {
-    .freetime-row { grid-template-columns: repeat(6, minmax(0, 1fr)); row-gap: 14px; }
-    .ft-cell:nth-child(6n+1) .ft-bubble { left: 0; right: auto; transform: translate(0, 6px); --tail: 18px; }
-    .ft-cell:nth-child(6n) .ft-bubble { left: auto; right: 0; transform: translate(0, 6px); --tail: calc(100% - 18px); }
-    .ft-cell:nth-child(6n+1).is-open .ft-bubble,
-    .ft-cell:nth-child(6n).is-open .ft-bubble { transform: translate(0, 0); }
+    .freetime-row { grid-template-columns: repeat(var(--n-half), minmax(0, 1fr)); row-gap: 14px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
