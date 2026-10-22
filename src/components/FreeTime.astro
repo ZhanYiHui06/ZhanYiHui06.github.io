@@ -7,7 +7,7 @@ import HandText from "./HandText.astro";
 
 type Status = "free" | "busy" | "maybe";
 interface Props {
-  title: string;
+  title?: string;
   note?: string;
   says: Partial<Record<Status, string>>;
   months: { month: string; status: Status }[];
@@ -70,7 +70,7 @@ const used = (["free", "maybe", "busy"] as Status[]).filter((st) => months.some(
 ---
 {cells.length > 0 && (
   <div class="freetime" data-freetime>
-    <h3 class="freetime-title hand"><HandText text={title} /></h3>
+    {title && <h3 class="freetime-title hand"><HandText text={title} /></h3>}
     {note && <p class="freetime-note">{note}</p>}
     <ol class="freetime-row">
       {cells.map((c) => (
