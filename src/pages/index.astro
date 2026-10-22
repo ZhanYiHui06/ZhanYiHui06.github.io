@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import HandText from "../components/HandText.astro";
 import SectionTitle from "../components/SectionTitle.astro";
 import ImageStack from "../components/ImageStack.astro";
+import FreeTime from "../components/FreeTime.astro";
 import { loadSite } from "../lib/content.mjs";
 import { withBase, isExternal } from "../lib/url";
 
@@ -183,6 +184,7 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
     <section class="contact" id="contact">
       <h2 class="hand"><SectionTitle title={contact.title} image={contact.titleImage} /></h2>
       {contact.lead && <p class="contact-lead">{contact.lead}</p>}
+      {contact.freetime && <FreeTime {...contact.freetime} />}
       {contactLinks.length > 0 && (
         <div class="contact-links">
           {contactLinks.map((l) => <a {...linkAttrs(l.href)}>{l.label}</a>)}
@@ -196,5 +198,6 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
   <script>
     import "../scripts/nav.ts";
     import "../scripts/stack.ts";
+    import "../scripts/freetime.ts";
   </script>
 </Base>

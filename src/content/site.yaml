@@ -191,6 +191,29 @@ note:
 contact:
   title: 来聊聊 # hand
   lead: 在找 2027 年 1 月起的日常实习，方向是 AI 产品经理、产品运营或用户研究，上海、杭州或远程都可以。
+  # 档期格子：一格一个月，按时间顺序写。status 填 有空 / 待定 / 没空（或 free / maybe / busy）。
+  # 已经过去的月份页面上会自动隐藏，记得往后补新的月份。删掉整个 freetime 就不显示这块。
+  freetime:
+    title: 最近的档期 # hand
+    note: 鼠标放到格子上（手机上点一下）看看那个月有没有空。
+    months: # ⚠️ 下面是占位，等你给真实安排
+      - { month: 2026-11, status: 没空 }
+      - { month: 2026-12, status: 待定 }
+      - { month: 2027-01, status: 有空 }
+      - { month: 2027-02, status: 有空 }
+      - { month: 2027-03, status: 有空 }
+      - { month: 2027-04, status: 有空 }
+      - { month: 2027-05, status: 待定 }
+      - { month: 2027-06, status: 没空 }
+      - { month: 2027-07, status: 有空 }
+      - { month: 2027-08, status: 有空 }
+      - { month: 2027-09, status: 待定 }
+      - { month: 2027-10, status: 有空 }
+    # 气泡里的话，想改再取消注释
+    # says:
+    #   free: 确认有空！😄
+    #   busy: 不好意思，已有安排😭
+    #   maybe: 薛定谔的状态😵‍💫
   links:
     - { label: zhanyihui06@gmail.com, href: "mailto:zhanyihui06@gmail.com" }
     # 简历 PDF 放到 public/ 目录，比如 public/resume.pdf，然后把 href 改成 /resume.pdf

@@ -1,0 +1,259 @@
+---
+// A row of hand-drawn month cells coloured by availability. Each cell is
+// drawn at build time with its own slight wobble (seeded by its index, so the
+// page looks the same on every build) and filled with crayon-like scribbles.
+// The bubble shows on hover/focus via CSS, and on tap via src/scripts/freetime.ts.
+import HandText from "./HandText.astro";
+
+type Status = "free" | "busy" | "maybe";
+interface Props {
+  title: string;
+  note?: string;
+  says: Partial<Record<Status, string>>;
+  months: { month: string; status: Status }[];
+}
+const { title, note, says, months } = Astro.props;
+
+const SAYS: Record<Status, string> = {
+  free: says.free || "确认有空！😄",
+  busy: says.busy || "不好意思，已有安排😭",
+  maybe: says.maybe || "薛定谔的状态😵‍💫",
+};
+const LEGEND: Record<Status, string> = { free: "有空", maybe: "暂定", busy: "已有安排" };
+
+// deterministic jitter in [-amp, amp]
+const rand = (seed: number) => {
+  const x = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
+  return x - Math.floor(x);
+};
+const j = (seed: number, amp: number) => +((rand(seed) * 2 - 1) * amp).toFixed(1);
+
+const W = 60;
+const H = 46;
+function outline(i: number) {
+  const s = i * 17 + 3;
+  const p = [
+    [3 + j(s, 1.6), 3 + j(s + 1, 1.6)],
+    [W - 3 + j(s + 2, 1.6), 3 + j(s + 3, 1.6)],
+    [W - 3 + j(s + 4, 1.6), H - 3 + j(s + 5, 1.6)],
+    [3 + j(s + 6, 1.6), H - 3 + j(s + 7, 1.6)],
+  ];
+  // each edge bows a little; the stroke overshoots its start like a pen would
+  const bow = (a: number[], b: number[], k: number) =>
+    `Q${((a[0] + b[0]) / 2 + j(k, 1.4)).toFixed(1)} ${((a[1] + b[1]) / 2 + j(k + 1, 1.4)).toFixed(1)} ${b[0]} ${b[1]}`;
+  return `M${p[0][0]} ${p[0][1]} ${bow(p[0], p[1], s + 8)} ${bow(p[1], p[2], s + 10)} ${bow(p[2], p[3], s + 12)} ${bow(p[3], p[0], s + 14)} L${p[0][0] + 4} ${p[0][1] + j(s + 16, 1)}`;
+}
+function scribble(i: number) {
+  // diagonal back-and-forth strokes, kept inside the outline
+  const s = i * 31 + 7;
+  let d = `M7 ${H - 9}`;
+  for (let x = 7, k = 0; x <= W - 17; x += 6, k++) {
+    d += ` L${(x + 4 + j(s + k, 1.2)).toFixed(1)} ${(8 + j(s + k + 50, 1.5)).toFixed(1)}`;
+    d += ` L${(x + 8 + j(s + k + 90, 1.2)).toFixed(1)} ${(H - 8 + j(s + k + 130, 1.5)).toFixed(1)}`;
+  }
+  return d;
+}
+
+const cells = months.map((m, i) => {
+  const [y, mo] = m.month.split("-").map(Number);
+  return {
+    ...m,
+    key: `${y}-${String(mo).padStart(2, "0")}`,
+    label: `${String(y).slice(2)}.${mo}`,
+    full: `${y} 年 ${mo} 月`,
+    outline: outline(i),
+    scribble: scribble(i),
+    tilt: j(i * 5 + 1, 1.2),
+  };
+});
+const used = (["free", "maybe", "busy"] as Status[]).filter((st) => months.some((m) => m.status === st));
+---
+{cells.length > 0 && (
+  <div class="freetime" data-freetime>
+    <h3 class="freetime-title hand"><HandText text={title} /></h3>
+    {note && <p class="freetime-note">{note}</p>}
+    <ol class="freetime-row">
+      {cells.map((c) => (
+        <li class="ft-cell" data-month={c.key} style={`--tilt:${c.tilt}deg`}>
+          <button type="button" class={`ft-box is-${c.status}`} aria-describedby={`ft-${c.key}`}>
+            <svg viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
+              <path class="ft-fill" d={c.outline} />
+              <path class="ft-scribble" d={c.scribble} />
+              <path class="ft-line" d={c.outline} />
+            </svg>
+            <span class="sr-only">{c.full}</span>
+          </button>
+          <span class="ft-bubble" role="tooltip" id={`ft-${c.key}`}>{SAYS[c.status]}</span>
+          <span class="ft-label" aria-hidden="true">{c.label}</span>
+        </li>
+      ))}
+    </ol>
+    <ul class="freetime-legend">
+      {used.map((st) => <li><span class={`ft-dot is-${st}`} aria-hidden="true"></span>{LEGEND[st]}</li>)}
+    </ul>
+  </div>
+)}
+
+<style is:global>
+  /* muted, low-saturation crayons: sage / dusty rose / oat yellow */
+  .freetime {
+    --ft-free: #A9BFA3;
+    --ft-busy: #D7A39B;
+    --ft-maybe: #E4CF96;
+    margin: 0 0 44px;
+  }
+
+  .freetime-title {
+    margin: 0 0 6px;
+    font-size: 22px;
+  }
+
+  .freetime-note {
+    margin: 0 0 18px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .freetime-row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 6px;
+    max-width: 760px;
+  }
+
+  .ft-cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .ft-box {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    transform: rotate(var(--tilt));
+    transition: transform 0.18s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ft-box svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .ft-box:focus-visible { outline: none; }
+  .ft-box:focus-visible .ft-line { stroke: var(--accent); stroke-width: 2.2; }
+
+  .ft-fill { opacity: 0.5; }
+  .ft-scribble { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; opacity: 0.85; }
+  .ft-line { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  .is-free .ft-fill { fill: var(--ft-free); }
+  .is-free .ft-scribble { stroke: var(--ft-free); }
+  .is-busy .ft-fill { fill: var(--ft-busy); }
+  .is-busy .ft-scribble { stroke: var(--ft-busy); }
+  .is-maybe .ft-fill { fill: var(--ft-maybe); }
+  .is-maybe .ft-scribble { stroke: var(--ft-maybe); }
+
+  .ft-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* speech bubble: wobbly corners, a little tail, fades up into place */
+  .ft-bubble {
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    z-index: 5;
+    padding: 7px 12px;
+    background: var(--bg);
+    border: 1.5px solid var(--ink);
+    border-radius: 14px 18px 16px 12px / 12px 15px 17px 14px;
+    font-size: 13px;
+    line-height: 1.4;
+    white-space: nowrap;
+    color: var(--ink);
+    box-shadow: 2px 3px 0 var(--soft);
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-50%, 6px);
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  .ft-bubble::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: var(--tail, 50%);
+    width: 9px;
+    height: 9px;
+    margin: -4px 0 0 -5px;
+    background: var(--bg);
+    border-right: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink);
+    transform: rotate(40deg) skewX(8deg);
+  }
+
+  /* keep edge bubbles on screen: anchor them to the cell's outer side */
+  .ft-cell:nth-child(-n+2) .ft-bubble { left: 0; transform: translate(0, 6px); --tail: 18px; }
+  .ft-cell:nth-last-child(-n+2) .ft-bubble { left: auto; right: 0; transform: translate(0, 6px); --tail: calc(100% - 18px); }
+
+  @media (hover: hover) {
+    .ft-cell:hover .ft-box { transform: rotate(var(--tilt)) translateY(-2px); }
+    .ft-cell:hover .ft-bubble { opacity: 1; transform: translate(-50%, 0); }
+    .ft-cell:nth-child(-n+2):hover .ft-bubble,
+    .ft-cell:nth-last-child(-n+2):hover .ft-bubble { transform: translate(0, 0); }
+  }
+
+  .ft-cell:has(.ft-box:focus-visible) .ft-bubble,
+  .ft-cell.is-open .ft-bubble { opacity: 1; transform: translate(-50%, 0); }
+  .ft-cell:nth-child(-n+2):has(.ft-box:focus-visible) .ft-bubble,
+  .ft-cell:nth-last-child(-n+2):has(.ft-box:focus-visible) .ft-bubble,
+  .ft-cell:nth-child(-n+2).is-open .ft-bubble,
+  .ft-cell:nth-last-child(-n+2).is-open .ft-bubble { transform: translate(0, 0); }
+
+  .freetime-legend {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    margin: 14px 0 0;
+    padding: 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .freetime-legend li { display: flex; align-items: center; gap: 6px; }
+
+  .ft-dot {
+    width: 12px;
+    height: 10px;
+    border: 1.2px solid var(--ink);
+    border-radius: 3px 5px 4px 2px;
+  }
+
+  .ft-dot.is-free { background: var(--ft-free); }
+  .ft-dot.is-busy { background: var(--ft-busy); }
+  .ft-dot.is-maybe { background: var(--ft-maybe); }
+
+  /* phones: two rows of six so the labels stay readable */
+  @media (max-width: 560px) {
+    .freetime-row { grid-template-columns: repeat(6, minmax(0, 1fr)); row-gap: 14px; }
+    .ft-cell:nth-child(6n+1) .ft-bubble { left: 0; right: auto; transform: translate(0, 6px); --tail: 18px; }
+    .ft-cell:nth-child(6n) .ft-bubble { left: auto; right: 0; transform: translate(0, 6px); --tail: calc(100% - 18px); }
+    .ft-cell:nth-child(6n+1).is-open .ft-bubble,
+    .ft-cell:nth-child(6n).is-open .ft-bubble { transform: translate(0, 0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ft-box, .ft-bubble { transition: none; }
+  }
+</style>
