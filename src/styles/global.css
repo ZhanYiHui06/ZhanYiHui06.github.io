@@ -457,15 +457,16 @@ a:focus-visible {
   transform: translateY(-4px);
 }
 
-.menu-go {
-  color: var(--muted);
-  transition: transform 0.2s ease, color 0.2s ease;
+.menu-price {
+  font-size: 18px;
+  color: var(--ink);
+  white-space: nowrap;
+  transition: color 0.2s ease;
 }
 
-.menu-item:hover .menu-go,
-.menu-item:focus-visible .menu-go {
+.menu-item:hover .menu-price,
+.menu-item:focus-visible .menu-price {
   color: var(--accent);
-  transform: translateX(4px);
 }
 
 .menu-desc {
@@ -956,7 +957,7 @@ a:focus-visible {
   .menu { padding: 28px 22px 22px; }
   .menu-line { flex-wrap: wrap; gap: 6px 10px; }
   .menu-dots { display: none; }
-  .menu-go { margin-left: auto; }
+  .menu-price { margin-left: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
