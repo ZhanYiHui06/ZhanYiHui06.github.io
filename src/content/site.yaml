@@ -15,7 +15,7 @@ meta:
   title: 詹毅辉 · 若甫
   description: 南通大学计算机 2024 级。独立做过三个上线的产品，有论文发表于 IEEE JSTARS、MICCAI 2026，也是字节 TRAE 与美团 Tabbit 的校园大使。在找 AI 产品经理、产品运营、用户研究方向的实习。
   # 网站正式域名（用于 canonical 和分享卡片），没有域名就先留空
-  url: ""
+  url: "https://ruofu.site"
 
 # 顶部占位提示；不需要时保持 ""
 draftNote: ""

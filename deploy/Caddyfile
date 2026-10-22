@@ -1,9 +1,14 @@
 # Caddy: automatic HTTPS (Let's Encrypt) with no extra setup.
 # Install:  https://caddyserver.com/docs/install
 # Use:      sudo cp Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
-# Replace example.com with your domain (its DNS A record must point at this server).
+# Replace ruofu.site with your domain (its DNS A record must point at this server).
 
-example.com, www.example.com {
+# www → apex, so there is a single canonical address
+www.ruofu.site {
+	redir https://ruofu.site{uri} permanent
+}
+
+ruofu.site {
 	root * /var/www/personal-page
 	encode zstd gzip
 
