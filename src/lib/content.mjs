@@ -68,6 +68,24 @@ const section = z.discriminatedUnion("layout", [
   }),
 ]);
 
+// Availability, one cell per month. Status accepts English or Chinese so the
+// yaml reads naturally either way.
+const STATUS = { free: "free", 有空: "free", busy: "busy", 没空: "busy", maybe: "maybe", 待定: "maybe" };
+const freetime = z.object({
+  title: optionalText,
+  note: optionalText,
+  // tooltip lines; any left out fall back to the defaults in FreeTime.astro
+  says: z.object({ free: optionalText, busy: optionalText, maybe: optionalText }).default({}),
+  months: z
+    .array(
+      z.object({
+        month: z.string().regex(/^\d{4}-(0?[1-9]|1[0-2])$/, "month 写成 2027-01 这样"),
+        status: z.enum(Object.keys(STATUS)).transform((v) => STATUS[v]),
+      })
+    )
+    .default([]),
+});
+
 const schema = z.object({
   meta: z.object({
     title: text,
@@ -111,6 +129,7 @@ const schema = z.object({
     titleImage: z.string().optional(),
     lead: optionalText,
     links: z.array(link).default([]),
+    freetime: freetime.optional(),
   }),
 });
 
@@ -150,6 +169,7 @@ export function handTexts(site) {
     site.hero.tagline,
     site.note.title,
     site.contact.title,
+    site.contact.freetime?.title || "",
     ...site.sections.map((s) => s.title),
     ...(site.menu ? [site.menu.title, ...site.menu.items.map((m) => m.name)] : []),
     "404找不到这一页回首页", // src/pages/404.astro
