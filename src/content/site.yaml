@@ -26,7 +26,7 @@ hero:
   kicker: AI PRODUCT · RESEARCH · CAMPUS
   greeting: 你好，我是 # hand，后面会自动接上 name
   tagline: 用着不顺手，就自己做一个 # hand
-  lead: 南通大学计算机 2024 级，也可以叫我若甫。过去两年我主要在折腾三件事：做能用起来的独立软件、泡实验室写 CV 论文（发了 MICCAI 和 JSTARS），以及在学校里组织 AI 社团和大厂的活动。
+  lead: 南通大学计算机 2024 级，也可以叫我若甫。过去两年我主要在做三件事：开发能真正用起来的独立软件，在实验室做计算机视觉研究（发表了 MICCAI 和 JSTARS），以及在学校里组织 AI 社团和大厂的活动。
   meta:
     - 想做：AI 产品经理 / 产品运营 / 用户研究
     - 南通大学 · 计算机科学与技术 2024 级
@@ -45,7 +45,7 @@ menu:
     - name: 实验室日常
       tag: 硬核
       ingredients: 计算机科班 · 计算机视觉 · 论文发表
-      desc: 泡在实验室里跑代码、调模型，攒下了 5 篇论文。
+      desc: 在实验室跑代码、调模型，攒下了 5 篇论文。
       target: tech
     - name: 线下主理
       tag: 人气
