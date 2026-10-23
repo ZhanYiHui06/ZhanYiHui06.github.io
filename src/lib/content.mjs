@@ -122,6 +122,7 @@ const schema = z.object({
   sections: z.array(section).min(1),
   note: z.object({
     title: text,
+    en: optionalText,
     paragraphs: z.array(text).default([]),
   }),
   contact: z.object({

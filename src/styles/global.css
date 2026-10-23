@@ -111,6 +111,10 @@ a:focus-visible {
   transform-origin: center bottom;
 }
 
+/* a phrase moves to the next line as a whole, so long titles wrap at the
+   comma instead of between any two glyphs (each .char is its own box) */
+.phrase { display: inline-block; }
+
 /* mild crooked offsets — playful, not chaotic */
 .char:nth-child(3n)   { transform: rotate(1.4deg) translateY(1px); }
 .char:nth-child(3n+1) { transform: rotate(-1deg) translateY(0); }
@@ -531,7 +535,8 @@ a:focus-visible {
 
 .contact .title-img { height: clamp(48px, 7vw, 64px); }
 
-.section-head .en {
+.section-head .en,
+.note-strip .en {
   margin-top: 10px;
   font-size: 12px;
   letter-spacing: 0.2em;

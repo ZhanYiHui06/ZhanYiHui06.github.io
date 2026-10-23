@@ -177,7 +177,10 @@ const updated = new Intl.DateTimeFormat("zh-CN", {
     ))}
 
     <section class="note-strip" aria-labelledby="note-title">
-      <h2 class="title hand" id="note-title"><HandText text={note.title} /></h2>
+      <div>
+        <h2 class="title hand" id="note-title"><HandText text={note.title} /></h2>
+        {note.en && <div class="en" lang="en">{note.en}</div>}
+      </div>
       <div>{note.paragraphs.map((t) => <p>{t}</p>)}</div>
     </section>
 

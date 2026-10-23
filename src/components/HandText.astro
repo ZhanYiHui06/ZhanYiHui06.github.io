@@ -2,10 +2,14 @@
 // Splits text into slightly crooked characters — the 拙趣 signature.
 // Done at build time (the old page did it in the browser and double-wrapped
 // nested titles). Screen readers get the plain text instead of single glyphs.
+// Characters are grouped into phrases ending at CJK punctuation, so a long
+// line breaks after a comma rather than mid-phrase.
 interface Props {
   text: string;
 }
 const { text } = Astro.props;
-const chars = [...text];
+const phrases = text.match(/[^，。！？、：；]*[，。！？、：；]*/g)!.filter(Boolean);
 ---
-<span class="sr-only">{text}</span><span aria-hidden="true">{chars.map((ch) => (/\s/.test(ch) ? ch : <span class="char">{ch}</span>))}</span>
+<span class="sr-only">{text}</span><span aria-hidden="true">{phrases.map((p) => (
+  <span class="phrase">{[...p].map((ch) => (/\s/.test(ch) ? ch : <span class="char">{ch}</span>))}</span>
+))}</span>
