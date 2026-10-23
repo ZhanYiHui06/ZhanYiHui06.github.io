@@ -25,7 +25,7 @@ name: 詹毅辉 # hand
 hero:
   kicker: AI PRODUCT · RESEARCH · CAMPUS
   greeting: 你好，我是 # hand，后面会自动接上 name
-  tagline: 喜欢琢磨产品细节，遇到不顺手的工具就自己动手造 # hand
+  tagline: 用着不顺手，就自己做一个 # hand
   lead: 南通大学计算机 2024 级，也可以叫我若甫。过去两年我主要在折腾三件事：做能用起来的独立软件、泡实验室写 CV 论文（发了 MICCAI 和 JSTARS），以及在学校里张罗 AI 社团和大厂活动。
   meta:
     - 想做：AI 产品经理 / 产品运营 / 用户研究
