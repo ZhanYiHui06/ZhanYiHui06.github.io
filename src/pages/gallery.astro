@@ -1,0 +1,188 @@
+---
+// The photo gallery. Deliberately its own world: none of the homepage's
+// hand-drawn styling is loaded here (no Base layout, no global.css).
+//
+// With JS: a full-screen wall of photos that tiles forever and can be dragged
+// in any direction, opening into a full-screen viewer. Without JS: the same
+// photos as a plain grid of links.
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource/instrument-serif/400-italic.css";
+import serifItalic from "@fontsource/instrument-serif/files/instrument-serif-latin-400-italic.woff2?url";
+import "../styles/gallery.css";
+import { loadGallery } from "../lib/gallery";
+import { loadSite } from "../lib/content.mjs";
+import { springEasing } from "../lib/spring.mjs";
+import { withBase } from "../lib/url";
+
+const site = loadSite();
+const gallery = await loadGallery();
+const { photos } = gallery;
+
+const pad = (n: number) => String(n).padStart(2, "0");
+const total = pad(photos.length);
+const caption = (p: (typeof photos)[number]) => [p.place, p.date].filter(Boolean).join(" · ");
+const credits = photos.filter((p) => p.credit);
+
+const title = `${gallery.meta.title} · ${site.name}`;
+const canonical = site.meta.url ? new URL("/gallery", site.meta.url).href : undefined;
+
+// Spring curves baked into CSS linear() easings; browsers without linear()
+// keep the cubic-bezier fallbacks in gallery.css.
+const springs = {
+  reveal: springEasing({ stiffness: 36, damping: 12 }),
+  settle: springEasing({ stiffness: 120, damping: 20 }),
+  pop: springEasing({ stiffness: 200, damping: 18 }),
+};
+const springCss = `@supports (transition-timing-function: linear(0, 1)) { :root {${Object.entries(springs)
+  .map(([name, s]) => `--ease-${name}: ${s.easing}; --dur-${name}: ${s.duration}ms;`)
+  .join(" ")}} }`;
+
+// Viewer data, read by src/scripts/gallery/viewer.ts
+const viewerData = photos.map((p) => ({
+  title: p.title,
+  caption: caption(p),
+  camera: p.camera,
+  alt: p.alt || p.title,
+  width: p.width,
+  height: p.height,
+  avif: p.avif,
+  webp: p.webp,
+  color: p.color,
+  blur: p.blur,
+}));
+
+const words = (s: string) => s.split(/(\s+)/).filter(Boolean);
+---
+<!doctype html>
+<html lang="zh-CN" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    {gallery.meta.description && <meta name="description" content={gallery.meta.description} />}
+    {gallery.draft && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    {gallery.meta.description && <meta property="og:description" content={gallery.meta.description} />}
+    <meta name="theme-color" content="#0b0a09" />
+    <meta name="color-scheme" content="dark" />
+    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <link rel="preload" href={serifItalic} as="font" type="font/woff2" crossorigin />
+    <script is:inline>document.documentElement.classList.replace("no-js", "js");</script>
+    <style is:inline set:html={springCss}></style>
+  </head>
+  <body class="g">
+    <header class="g-bar">
+      <a class="g-home" href={withBase("/")}>
+        <span class="g-arrow" aria-hidden="true">←</span>
+        <span>{site.name}</span>
+      </a>
+      <span class="g-bar-mid" aria-hidden="true">{gallery.en || gallery.title}</span>
+      <button class="g-info-btn" type="button" aria-expanded="false" aria-controls="g-info">
+        <em>{total}</em> frames · 关于
+      </button>
+    </header>
+
+    <div class="g-hero" aria-hidden="true">
+      {gallery.en && (
+        <p class="g-hero-en" lang="en">
+          {words(gallery.en).map((w, i) =>
+            /^\s+$/.test(w) ? w : <span class="g-word"><span style={`--i:${i}`}>{w}</span></span>
+          )}
+        </p>
+      )}
+      <p class="g-hero-zh">{gallery.title}</p>
+    </div>
+
+    <p class="g-hint" aria-hidden="true"><span class="g-hint-drag">拖动 · 滚动</span>浏览，点开任意一张</p>
+
+    <main class="g-main">
+      <h1 class="g-sr">{gallery.title}{gallery.en && ` · ${gallery.en}`}</h1>
+      {gallery.intro && <p class="g-sr">{gallery.intro}</p>}
+
+      <!-- Source list: the no-JS grid, and the templates the wall is built from -->
+      <ul class="g-list" aria-label="照片">
+        {photos.map((p) => (
+          <li>
+            <a class="g-item" href={p.fallback} data-index={p.index - 1} style={`--ratio:${p.width}/${p.height};--tone:${p.color}`}>
+              <span class="g-pop">
+                <span class="g-inner">
+                  <span class="g-blur" style={`background-image:url(${p.blur})`} aria-hidden="true"></span>
+                  <picture>
+                    <source type="image/avif" srcset={p.avif} sizes="(min-width: 900px) 24vw, 48vw" />
+                    <img src={p.fallback} srcset={p.webp} sizes="(min-width: 900px) 24vw, 48vw" width={p.width} height={p.height} alt={p.alt || p.title} decoding="async" />
+                  </picture>
+                  <span class="g-cap">
+                    <span class="g-num">{pad(p.index)}</span>
+                    {p.title && <span class="g-cap-title">{p.title}</span>}
+                  </span>
+                </span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <div class="wall" aria-hidden="true"></div>
+    </main>
+
+    <aside class="g-info" id="g-info" aria-label="关于这组照片" hidden>
+      <div class="g-info-inner">
+        <button class="g-info-close" type="button" aria-label="关闭">关闭 <span aria-hidden="true">✕</span></button>
+        <p class="g-info-title">{gallery.title}{gallery.en && <span lang="en"> · {gallery.en}</span>}</p>
+        {gallery.intro && <p class="g-info-lead">{gallery.intro}</p>}
+        {gallery.draft && <p class="g-info-draft">这里暂时是示例照片，真实作品稍后替换。</p>}
+        {credits.length > 0 && (
+          <ol class="g-credits">
+            {credits.map((p) => (
+              <li>
+                <span class="g-num">{pad(p.index)}</span>
+                <span class="g-credit-title">{p.title}</span>
+                {p.source ? <a href={p.source} target="_blank" rel="noopener">{p.credit}</a> : <span>{p.credit}</span>}
+              </li>
+            ))}
+          </ol>
+        )}
+        <a class="g-back" href={withBase("/")}><span aria-hidden="true">←</span> 回到主页</a>
+      </div>
+    </aside>
+
+    <div class="g-cursor" aria-hidden="true"><span class="g-cursor-dot"><span class="g-cursor-label">Drag</span></span></div>
+
+    <div class="view" role="dialog" aria-modal="true" aria-label="全屏浏览" hidden>
+      <div class="view-amb" aria-hidden="true"><span></span><span></span></div>
+      <div class="view-stage">
+        <div class="view-frame"><img class="view-low" alt="" /><img class="view-hi" alt="" /></div>
+        <div class="view-frame"><img class="view-low" alt="" /><img class="view-hi" alt="" /></div>
+      </div>
+      <div class="view-top">
+        <span class="view-count"><em data-view-index>01</em> / {total}</span>
+        <button class="view-close" type="button" aria-label="关闭">关闭 <span aria-hidden="true">✕</span></button>
+      </div>
+      <div class="view-cap" aria-live="polite">
+        <span class="view-num" aria-hidden="true"><span data-view-num>01</span></span>
+        <span class="view-text">
+          <span class="view-title"></span>
+          <span class="view-meta"></span>
+          <span class="view-camera"></span>
+        </span>
+      </div>
+      <nav class="view-strip" aria-label="选择照片">
+        {photos.map((p) => (
+          <button type="button" class="view-thumb" data-index={p.index - 1} aria-label={`第 ${p.index} 张${p.title ? `：${p.title}` : ""}`} style={`--thumb:url(${p.thumb});--ratio:${p.width}/${p.height}`}></button>
+        ))}
+      </nav>
+      <button class="view-nav view-prev" type="button" aria-label="上一张"><span aria-hidden="true">←</span></button>
+      <button class="view-nav view-next" type="button" aria-label="下一张"><span aria-hidden="true">→</span></button>
+    </div>
+
+    <script type="application/json" id="view-data" set:html={JSON.stringify(viewerData).replace(/</g, "\\u003c")}></script>
+  </body>
+</html>
+
+<script>
+  import "../scripts/gallery/wall";
+  import "../scripts/gallery/viewer";
+  import "../scripts/gallery/cursor";
+  import "../scripts/gallery/info";
+</script>
