@@ -4,14 +4,16 @@
 #   1. 把原图放进 src/assets/gallery/（jpg / png / webp 都行，直接放相机或手机导出的原图，
 #      构建时会自动压缩成多种尺寸的 AVIF 和 WebP，不用自己处理）
 #   2. 在下面 photos 里按想要的顺序列出来，file 写文件名
-# 横图、竖图、方图会自动排成错落的版式；顺序决定版式，可以多试几种排列。
+# 照片墙会自动把它们发到各列里；全屏浏览和编号按这里的顺序。
 
 meta:
   title: 摄影
   description: 詹毅辉拍的照片。
 
-# 现在是示例照片：不让搜索引擎收录，并在页脚注明。换成自己的照片后改成 false。
-draft: true
+# draft: true 时页面不让搜索引擎收录，并在「关于」里注明是示例照片。
+draft: false
+
+# 标题和 alt 描述是根据画面先填的，地点只写了能认出来的，都可以随便改。
 
 title: 留住的光
 en: Light, kept.
@@ -20,91 +22,67 @@ intro: 走路时停下来的那几秒。
 photos:
   # file 必填；其余都可以省略
   #   title  作品名        place  地点        date  时间（随便写，如 2025 秋）
-  #   camera 器材/参数，如 "X100V · f/2 · 1/500s"
+  #   camera 器材/参数，如 "Lumix G 12-60mm · f/4 · 1/250s"
   #   alt    给读屏软件的画面描述（没写就用 title）
   #   credit / source  图片作者和出处（用别人的图时写，自己拍的不用）
-  # 下面是 Wikimedia Commons 上的 CC0 示例照片，换成自己的之后连同 src/assets/gallery/ 里的文件一起删掉
-  - file: 01-jetty-fog.jpg
-    title: 雾中栈桥
-    place: 瑞典 Holländaröd
-    date: "2018"
-    alt: 雾里伸进水面的木栈桥，远处什么也看不见
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Jetty_in_fog_at_Holländaröd_1.jpg"
-  - file: 02-barn-window.jpg
-    title: 谷仓的窗
-    place: 瑞典 Färlev
-    date: "2018"
-    alt: 红色木板谷仓墙上一扇旧白框窗
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Window_on_a_barn_in_Färlev.jpg"
-  - file: 03-boathouse-moon.jpg
-    title: 月光下的船屋
-    place: 瑞典 Holma
-    date: "2017"
-    alt: 夜里月光照着水边的红色船屋
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Holma_Boat_Club_by_the_light_of_the_moon.jpg"
-  - file: 04-stained-glass.jpg
-    title: 彩窗投下的光
-    place: 哥本哈根 大理石教堂
-    date: "2016"
-    alt: 彩色玻璃窗的蓝光投在教堂墙上的十字形光斑
-    credit: Jebulon · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Light_through_a_stained_glass_window,_cross,_wall_of_the_Marmor_(Frederiks)_Kirke_Copenhagen_Denmark.jpg"
-  - file: 05-morning-mist.jpg
-    title: 晨雾
-    place: 瑞典西海岸
-    date: "2018"
-    alt: 刚翻过的田地上，晨雾贴着地面散开
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Morning_mist_lifting_from_plowed_field_3.jpg"
-  - file: 06-snow-tracks.jpg
-    title: 钠灯下的雪
-    place: 瑞典
-    date: "2017"
-    alt: 橙色路灯下，雪地上交错的车辙
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Car_tire_tracks_in_snow_under_sodium_light.jpg"
-  - file: 07-thunder-cloud.jpg
-    title: 雷雨云
-    place: 瑞典 Gåseberg
-    date: "2017"
-    alt: 低矮房屋上方翻涌的灰色雷雨云
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Thunder_cloud_over_Gåseberg.jpg"
-  - file: 08-station-lights.jpg
-    title: 车站穹顶
-    place: 布拉格中央车站
-    date: "2025"
-    alt: 车站天花板上成排的红色圆形灯罩
-    credit: AVDLCZ · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Prague_Main_Railway_Station_Ceiling_Lights.jpg"
-  - file: 09-oakmoss.jpg
-    title: 枝上的地衣
-    place: 瑞典 Myrstigen
-    date: "2020"
-    alt: 细枝上挂着一簇灰绿色的地衣
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Oakmoss_at_Myrstigen_3.jpg"
-  - file: 10-half-moon.jpg
-    title: 上弦月
-    place: 瑞典 Brofjorden
-    date: "2019"
-    alt: 蓝调时分的峡湾，半月倒映在水面
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Waxing_half_moon_over_Brofjorden_1.jpg"
-  - file: 11-rain-marina.jpg
-    title: 雨落码头
-    place: 瑞典 Holma
-    date: "2018"
-    alt: 灰色雨幕里停满小船的码头
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Rain_over_Holma_marina.jpg"
-  - file: 12-last-light.jpg
-    title: 最后一缕光
-    place: 瑞典
-    date: "2019"
-    alt: 黄昏时带梯子的栈桥倒映在平静的水里
-    credit: W.carter · CC0 · Wikimedia Commons
-    source: "https://commons.wikimedia.org/wiki/File:Jetty_with_the_ladders_in_last_light_of_the_day.jpg"
+  - file: 1792721065818.jpg
+    title: 金顶与车流
+    place: 上海 静安寺
+    date: "2024.07"
+    alt: 高楼之间金色的静安寺，楼下是排得满满的车流
+  - file: 1792721065874.jpg
+    title: 寺前的路
+    place: 上海 静安寺
+    date: "2024.07"
+    alt: 从天桥俯看通往静安寺的马路，车道一直延伸到金色的寺庙
+  - file: 1792721065904.jpg
+    title: 穿过红门
+    date: "2024.07"
+    alt: 一个穿紫色上衣的男孩骑着共享单车经过一座绿瓦红柱的大门
+  - file: 1792721065919.jpg
+    title: 夜里的红车
+    date: "2024.07"
+    alt: 夜晚街口，一辆红色出租车停在路边，远处是路灯和行人
+  - file: 1792721065928.jpg
+    title: 白房间
+    date: "2024.07"
+    alt: 一间几乎全白的空房间，墙上一扇小窗，地面倒映着窗格
+  - file: 1792721065934.jpg
+    title: 江上夜航
+    place: 上海 黄浦江
+    date: "2024.07"
+    alt: 暮色里一艘亮着灯的游船驶过江面，对岸是亮灯的老建筑
+  - file: 1792721065942.jpg
+    title: 发光的 MAP
+    place: 上海 浦东美术馆
+    date: "2024.07"
+    alt: 阴天傍晚，浦东美术馆外墙上发着橙光的 MAP 标志
+  - file: 1792721065947.jpg
+    title: 窗外的江
+    place: 上海 浦东美术馆
+    date: "2024.07"
+    alt: 从高大的窗框里望出去，江面上驶过一艘白色游船，对岸是外滩
+  - file: 1792721381890.jpg
+    title: 梧桐树下
+    date: "2026.04"
+    alt: 两个人沿着梧桐树荫下的人行道往前走，路边停满了车
+  - file: 1792721381909.jpg
+    title: 港湾暮色
+    date: "2026.04"
+    alt: 黄昏的游艇港，桅杆和远处的高楼倒映在平静的水面上
+  - file: 1792721381953.jpg
+    title: 路灯下的老楼
+    date: "2026.04"
+    alt: 夜里一盏路灯照亮一栋老楼的门口和门前的树
+  - file: 1792721381991.jpg
+    title: 红瓦与高楼
+    date: "2026.04"
+    alt: 雾气里，山坡上的红瓦屋顶后面立着几栋高楼
+  - file: 1792721382021.jpg
+    title: 雾里的海湾
+    date: "2026.04"
+    alt: 从高处望向雾蒙蒙的海湾，海面上有一艘船，近处是红顶房子
+  - file: 1792721382037.jpg
+    title: 贝壳摊
+    date: "2026.04"
+    alt: 路边摊主脚边立着一块挂满贝壳和海星饰品的木板
